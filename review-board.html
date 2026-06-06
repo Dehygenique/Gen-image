@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DHThailand — Artwork Review Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:   #0E1628;
+    --gold:   #C5A253;
+    --gold-lt:#E2C97E;
+    --cream:  #F5F0E8;
+    --white:  #FDFCF9;
+    --grey:   #8A8A8A;
+    --border: rgba(197,162,83,0.25);
+    --shadow: 0 4px 40px rgba(14,22,40,0.18);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    color: var(--navy);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    background: var(--navy);
+    padding: 56px 40px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 80% at 50% -20%, rgba(197,162,83,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-ornament {
+    display: flex; align-items: center; justify-content: center;
+    gap: 16px; margin-bottom: 20px;
+  }
+  .header-ornament span {
+    display: block; height: 1px; width: 60px;
+    background: linear-gradient(90deg, transparent, var(--gold));
+  }
+  .header-ornament span:last-child {
+    background: linear-gradient(90deg, var(--gold), transparent);
+  }
+  .header-ornament svg { color: var(--gold); width: 18px; height: 18px; }
+  header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    font-weight: 300;
+    color: var(--white);
+    letter-spacing: 0.12em;
+    line-height: 1.2;
+  }
+  header h1 strong { color: var(--gold-lt); font-weight: 500; }
+  header p {
+    margin-top: 14px;
+    color: rgba(245,240,232,0.6);
+    font-size: 0.75rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+  .status-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 24px;
+    padding: 7px 20px;
+    border: 1px solid var(--border);
+    border-radius: 40px;
+    color: var(--gold-lt);
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #4CAF50; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  /* ─── PROGRESS ─── */
+  .progress-bar {
+    background: var(--navy);
+    padding: 16px 40px;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .step { display: flex; align-items: center; gap: 6px; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; }
+  .step-num {
+    width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold); font-size: 0.65rem;
+  }
+  .step-label { color: rgba(245,240,232,0.45); }
+  .step-divider { width: 24px; height: 1px; background: var(--border); }
+
+  /* ─── MAIN ─── */
+  main { max-width: 1280px; margin: 0 auto; padding: 60px 32px 80px; }
+
+  .section-header {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-tag {
+    font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 6px;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+  }
+  .section-meta { font-size: 0.7rem; color: var(--grey); letter-spacing: 0.1em; }
+
+  /* ─── ARTWORK SECTION ─── */
+  .artwork-section { margin-bottom: 80px; }
+
+  .artwork-info {
+    display: grid; grid-template-columns: 1fr auto;
+    align-items: start; gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .spec-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .chip {
+    padding: 4px 12px; border-radius: 20px;
+    font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase;
+    border: 1px solid var(--border); color: var(--grey);
+  }
+  .chip.gold { border-color: var(--gold); color: var(--gold); }
+
+  /* ─── DESIGN GRID ─── */
+  .design-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+  .design-card {
+    background: var(--white);
+    border: 2px solid transparent;
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 16px rgba(14,22,40,0.08);
+    position: relative;
+  }
+  .design-card:hover { border-color: var(--gold-lt); box-shadow: var(--shadow); transform: translateY(-3px); }
+  .design-card.selected { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold), var(--shadow); }
+  .design-card.selected::after {
+    content: '✓  เลือกแล้ว';
+    position: absolute; top: 10px; right: 10px;
+    background: var(--gold); color: var(--navy);
+    padding: 4px 10px; border-radius: 20px;
+    font-size: 0.6rem; letter-spacing: 0.1em; font-weight: 500;
+  }
+  .design-card img {
+    width: 100%; display: block;
+    aspect-ratio: auto;
+    object-fit: cover;
+    background: #e8e4dc;
+    min-height: 180px;
+  }
+  .card-footer {
+    padding: 12px 14px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .card-num { font-size: 0.65rem; color: var(--grey); letter-spacing: 0.12em; }
+  .card-link {
+    font-size: 0.65rem; letter-spacing: 0.1em; text-decoration: none;
+    color: var(--gold); border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+  .card-link:hover { border-color: var(--gold); }
+
+  /* ─── COMMENT PANEL ─── */
+  .comment-panel {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 28px 32px;
+  }
+  .comment-panel h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; font-weight: 500;
+    margin-bottom: 6px; letter-spacing: 0.04em;
+  }
+  .comment-panel p.hint { font-size: 0.7rem; color: var(--grey); margin-bottom: 20px; }
+
+  .feedback-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  @media (max-width: 640px) { .feedback-grid { grid-template-columns: 1fr; } }
+
+  .feedback-item label {
+    display: block; font-size: 0.65rem; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--grey); margin-bottom: 6px;
+  }
+  .feedback-item select,
+  .feedback-item input {
+    width: 100%; padding: 9px 12px;
+    border: 1px solid var(--border); border-radius: 3px;
+    background: var(--cream); color: var(--navy);
+    font-family: 'Montserrat', sans-serif; font-size: 0.75rem;
+    outline: none; transition: border-color 0.2s;
+    appearance: none;
+  }
+  .feedback-item select:focus,
+  .feedback-item input:focus { border-color: var(--gold); }
+
+  .comment-box {
+    width: 100%; padding: 12px 14px;
+    border: 1px solid var(--border); border-radius: 3px;
+    background: var(--cream); color: var(--navy);
+    font-family: 'Montserrat', sans-serif; font-size: 0.8rem;
+    line-height: 1.6; resize: vertical; min-height: 100px;
+    outline: none; transition: border-color 0.2s;
+  }
+  .comment-box:focus { border-color: var(--gold); }
+
+  .comment-actions {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 16px; flex-wrap: wrap; gap: 12px;
+  }
+  .approval-group { display: flex; gap: 8px; align-items: center; }
+  .approval-group label { font-size: 0.7rem; color: var(--grey); }
+  .approval-btn {
+    padding: 8px 20px; border: 1px solid; border-radius: 3px;
+    font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.2s; font-family: 'Montserrat', sans-serif;
+  }
+  .approval-btn.approve { border-color: #4CAF50; color: #4CAF50; background: transparent; }
+  .approval-btn.approve:hover, .approval-btn.approve.active { background: #4CAF50; color: white; }
+  .approval-btn.revise { border-color: #E8A020; color: #E8A020; background: transparent; }
+  .approval-btn.revise:hover, .approval-btn.revise.active { background: #E8A020; color: white; }
+  .approval-btn.reject { border-color: #C0392B; color: #C0392B; background: transparent; }
+  .approval-btn.reject:hover, .approval-btn.reject.active { background: #C0392B; color: white; }
+
+  .submit-btn {
+    padding: 10px 28px;
+    background: var(--navy); color: var(--gold-lt);
+    border: 1px solid var(--gold); border-radius: 3px;
+    font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.2s; font-family: 'Montserrat', sans-serif;
+  }
+  .submit-btn:hover { background: var(--gold); color: var(--navy); }
+
+  /* ─── SAVED COMMENTS ─── */
+  .saved-comments { margin-top: 20px; }
+  .saved-comment {
+    padding: 12px 14px; margin-top: 8px;
+    background: var(--cream); border-left: 3px solid var(--gold);
+    border-radius: 0 3px 3px 0;
+    font-size: 0.75rem; line-height: 1.6;
+  }
+  .saved-comment .meta {
+    font-size: 0.62rem; color: var(--grey); margin-bottom: 4px;
+    display: flex; gap: 12px; align-items: center;
+  }
+  .badge { padding: 2px 8px; border-radius: 10px; font-size: 0.6rem; }
+  .badge.approve { background: rgba(76,175,80,0.15); color: #4CAF50; }
+  .badge.revise  { background: rgba(232,160,32,0.15); color: #E8A020; }
+  .badge.reject  { background: rgba(192,57,43,0.15);  color: #C0392B; }
+
+  /* ─── SUMMARY PANEL ─── */
+  #summary-panel {
+    background: var(--navy);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 36px 40px;
+    margin-top: 40px;
+    display: none;
+  }
+  #summary-panel h3 {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--white); font-size: 1.6rem; font-weight: 400;
+    margin-bottom: 24px; letter-spacing: 0.06em;
+  }
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+  .summary-card {
+    padding: 16px; border: 1px solid var(--border); border-radius: 3px;
+  }
+  .summary-card .label { font-size: 0.65rem; color: var(--grey); letter-spacing: 0.14em; text-transform: uppercase; }
+  .summary-card .value { font-size: 0.9rem; color: var(--white); margin-top: 6px; font-weight: 400; }
+  .summary-card .status-text { font-size: 0.7rem; margin-top: 4px; }
+
+  /* ─── DIVIDER ─── */
+  .section-divider {
+    display: flex; align-items: center; gap: 20px; margin: 56px 0;
+  }
+  .section-divider::before, .section-divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+  .section-divider span { font-size: 0.7rem; color: var(--grey); letter-spacing: 0.16em; text-transform: uppercase; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--navy);
+    padding: 32px 40px;
+    text-align: center;
+    font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(245,240,232,0.35);
+    border-top: 1px solid var(--border);
+  }
+  footer strong { color: var(--gold); font-weight: 400; }
+
+  /* ─── TOAST ─── */
+  .toast {
+    position: fixed; bottom: 32px; right: 32px;
+    background: var(--navy); color: var(--gold-lt);
+    border: 1px solid var(--gold);
+    padding: 12px 24px; border-radius: 3px;
+    font-size: 0.75rem; letter-spacing: 0.1em;
+    opacity: 0; transform: translateY(8px);
+    transition: all 0.3s ease; pointer-events: none; z-index: 999;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- ─── HEADER ─── -->
+<header>
+  <div class="header-ornament">
+    <span></span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
+    </svg>
+    <span></span>
+  </div>
+  <h1><strong>DH Thailand</strong><br>Artwork Review Board</h1>
+  <p>CI Guide · Pinterest Luxury Style · Draft v1.0</p>
+  <div class="status-badge">
+    <span class="status-dot"></span>
+    รอการตรวจสอบ — Awaiting Review
+  </div>
+</header>
+
+<!-- ─── PROGRESS ─── -->
+<div class="progress-bar">
+  <div class="step">
+    <div class="step-num">1</div>
+    <span class="step-label" style="color:var(--gold-lt)">Draft</span>
+  </div>
+  <div class="step-divider"></div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <span class="step-label">Review</span>
+  </div>
+  <div class="step-divider"></div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <span class="step-label">Revision</span>
+  </div>
+  <div class="step-divider"></div>
+  <div class="step">
+    <div class="step-num">4</div>
+    <span class="step-label">Approved</span>
+  </div>
+</div>
+
+<!-- ─── MAIN ─── -->
+<main>
+
+  <!-- ════════════════════════════════════
+       01 · POSTER
+  ═════════════════════════════════════ -->
+  <div class="artwork-section" id="section-poster">
+    <div class="section-header">
+      <div>
+        <div class="section-tag">Artwork 01</div>
+        <h2 class="section-title">Brand Poster</h2>
+        <div class="spec-chips">
+          <span class="chip gold">Portrait · A3</span>
+          <span class="chip">297 × 420 mm</span>
+          <span class="chip">Print + Digital</span>
+          <span class="chip">CI Guide Hero</span>
+        </div>
+      </div>
+      <div class="section-meta">เลือก 1 ตัวเลือก</div>
+    </div>
+
+    <div class="artwork-info">
+      <p style="font-size:0.8rem;color:var(--grey);max-width:560px">
+        โปสเตอร์หลักของแบรนด์ ใช้แสดงตัวตน DHThailand สไตล์ Luxury Pinterest
+        พร้อม CI Colors, Typography และ Brand Elements ครบถ้วน
+      </p>
+    </div>
+
+    <div class="design-grid" id="grid-poster">
+      <div class="design-card" onclick="selectCard('poster',0,this)">
+        <img src="https://design.canva.ai/Gzk_T-TQJfX_Tdc" alt="Poster Option 1" loading="lazy">
+        <div class="card-footer">
+          <span class="card-num">Option A</span>
+          <a href="https://www.canva.com/d/E2hSs-tEdopcO-H" target="_blank" class="card-link">เปิดใน Canva ↗</a>
+        </div>
+      </div>
+      <div class="design-card" onclick="selectCard('poster',1,this)">
+        <img src="https://design.canva.ai/Z-4WymKTSwT619J" alt="Poster Option 2" loading="lazy">
+        <div class="card-footer">
+          <span class="card-num">Option B</span>
+          <a href="https://www.canva.com/d/qxiZPT-E7y17tJu" target="_blank" class="card-link">เปิดใน Canva ↗</a>
+        </div>
+      </div>
+      <div class="design-card" onclick="selectCard('poster',2,this)">
+        <img src="https://design.canva.ai/L4pF_pBLtsfJJpN" alt="Poster Option 3" loading="lazy">
+        <div class="card-footer">
+          <span class="card-num">Option C</span>
+          <a href="https://www.canva.com/d/kCwHQQWwKiY5FOG" target="_blank" class="card-link">เปิดใน Canva ↗</a>
+        </div>
+      </div>
+      <div class="design-card" onclick="selectCard('poster',3,this)">
+        <img src="https://design.canva.ai/z5qBq-awj2uCkIQ" alt="Poster Option 4" loading="lazy">
+        <div class="card-footer">
+          <span class="card-num">Option D</span>
+          <a href="https://www.canva.com/d/F8cHItN02fv8RJ0" target="_blank" class="card-link">เปิดใน Canva ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="comment-panel">
+      <h4>ส่งคอมเม้นต์ — Poster Feedback</h4>
+      <p class="hint">เลือกตัวเลือกที่ชอบด้านบนก่อน แล้วแจ้งรายละเอียดที่ต้องการแก้ไข</p>
+      <div class="feedback-grid">
+        <div class="feedback-item">
+          <label>ตัวเลือกที่เลือก</label>
+          <select id="sel-poster">
+            <option value="">— กรุณาเลือก —</option>
+            <option>Option A</option><option>Option B</option>
+            <option>Option C</option><option>Option D</option>
+          </select>
+        </div>
+        <div class="feedback-item">
+          <label>สิ่งที่ต้องการแก้ไข</label>
+          <select id="type-poster">
+            <option value="">— ประเภท —</option>
+            <option>สี (Color)</option>
+            <option>ฟ้อนต์ / ข้อความ (Typography)</option>
+            <option>Layout / การจัด</option>
+            <option>รูปภาพ / Elements</option>
+            <option>ข้อความเนื้อหา (Copy)</option>
+            <option>อื่นๆ</option>
+          </select>
+        </div>
+      </div>
+      <textarea class="comment-box" id="comment-poster" placeholder="พิมพ์คอมเม้นต์ที่นี่... เช่น 'เปลี่ยนสีพื้นหลังเป็นโทนครีม' หรือ 'เพิ่มโลโก้มุมขวาบน'"></textarea>
+      <div class="comment-actions">
+        <div class="approval-group">
+          <label>สถานะ:</label>
+          <button class="approval-btn approve" onclick="setStatus('poster','approve',this)">✓ อนุมัติ</button>
+          <button class="approval-btn revise" onclick="setStatus('poster','revise',this)">↻ แก้ไข</button>
+          <button class="approval-btn reject" onclick="setStatus('poster','reject',this)">✕ ปฏิเสธ</button>
+        </div>
+        <button class="submit-btn" onclick="submitComment('poster')">ส่งคอมเม้นต์</button>
+      </div>
+      <div class="saved-comments" id="saved-poster"></div>
+    </div>
+  </div>
+
+  <div class="section-divider"><span>—</span></div>
+
+  <!-- ════════════════════════════════════
+       02 · BANNER 1 (Wide)
+  ═════════════════════════════════════ -->
+  <div class="artwork-section" id="section-banner1">
+    <div class="section-header">
+      <div>
+        <div class="section-tag">Artwork 02</div>
+        <h2 class="section-title">Banner — Wide Horizontal</h2>
+        <div class="spec-chips">
+          <span class="chip gold">Facebook Cover</span>
+          <span class="chip">820 × 312 px</span>
+          <span class="chip">Digital · Social</span>
+        </div>
+      </div>
+      <div class="section-meta">เลือก 1 ตัวเลือก</div>
+    </div>
+    <div class="artwork-info">
+      <p style="font-size:0.8rem;color:var(--grey);max-width:560px">
+        แบนเนอร์แนวนอนสำหรับ Facebook Cover และ Line OA
+        เน้น Brand Awareness ด้วยสไตล์หรูหราตรงตาม CI
+      </p>
+    </div>
+    <div class="design-grid" id="grid-banner1">
+      <div class="design-card" onclick="selectCard('banner1',0,this)">
+        <img src="https://design.canva.ai/t5wH8vD0CPsgUxi" alt="Banner 1 Option A" loading="lazy">
+        <div class="card-footer">
+          <span class="card-num">Option A</span>
+          <a href="https://www.canva.com/d/B_HquOMnnT_f0Jc" target="_blank" class="card-link">เปิดใน Canva ↗</a>
+        </div>
+      </div>
+      <div class="design-card" onclick="selectCard('banner1',1,this)">
+        <img src="https://design.canva.ai/l8QgFhmOK4oBwjU" alt="Banner 1 Option B" loading="lazy">
+        <div class="card-footer">
+          <span class="card-num">Option B</span>
+          <a href="https://www.canva.com/d/WLMpCUAgUKsQUzn" target="_blank" class="card-link">เปิดใน Canva ↗</a>
+        </div>
+      </div>
+      <div class="design-card" onclick="selectCard('banner1',2,this)">
+        <img src="https://design.canva.ai/gh99dO1FWZ7ZTmz" alt="Banner 1 Option C" loading="lazy">
+        <div class="card-footer">
+          <span class="card-num">Option C</span>
+          <a href="https://www.canva.com/d/vo29qPUyeg0G0dO" target="_blank" class="card-link">เปิดใน Canva ↗</a>
+        </div>
+      </div>
+      <div class="design-card" onclick="selectCard('banner1',3,this)">
+        <img src="https://design.canva.ai/b7wbmOYZB7EWdd1" alt="Banner 1 Option D" loading="lazy">
+        <div class="card-footer">
+          <span class="card-num">Option D</span>
+          <a href="https://www.canva.com/d/v7d28DfMleEfqqk" target="_blank" class="card-link">เปิดใน Canva ↗</a>
+        </div>
+      </div>
+    </div>
+    <div class="comment-panel">
+      <h4>ส่งคอมเม้นต์ — Banner Wide Feedback</h4>
+      <p class="hint">เลือกตัวเลือกที่ชอบด้านบนก่อน แล้วแจ้งรายละเอียดที่ต้องการแก้ไข</p>
+      <div class="feedback-grid">
+        <div class="feedback-item">
+          <label>ตัวเลือกที่เลือก</label>
+          <select id="sel-banner1">
+            <option value="">— กรุณาเลือก —</option>
+            <option>Option A</option><option>Option B</option>
+            <option>Option C</option><option>Option D</option>
+          </select>
+        </div>
+        <div class="feedback-item">
+          <label>สิ่งที่ต้องการแก้ไข</label>
+          <select id="type-banner1">
+            <option value="">— ประเภท —</option>
+            <option>สี (Color)</option>
+            <option>ฟ้อนต์ / ข้อความ (Typography)</option>
+            <option>Layout / การจัด</option>
+            <option>รูปภาพ / Elements</option>
+            <option>ข้อความเนื้อหา (Copy)</option>
+            <option>อื่นๆ</option>
+          </select>
+        </div>
+      </div>
+      <textarea class="comment-box" id="comment-banner1" placeholder="พิมพ์คอมเม้นต์ที่นี่..."></textarea>
+      <div class="comment-actions">
+        <div class="approval-group">
+          <label>สถานะ:</label>
+          <button class="approval-btn approve" onclick="setStatus('banner1','approve',this)">✓ อนุมัติ</button>
+          <button class="approval-btn revise" onclick="setStatus('banner1','revise',this)">↻ แก้ไข</button>
+          <button class="approval-btn reject" onclick="setStatus('banner1','reject',this)">✕ ปฏิเสธ</button>
+        </div>
+        <button class="submit-btn" onclick="submitComment('banner1')">ส่งคอมเม้นต์</button>
+      </div>
+      <div class="saved-comments" id="saved-banner1"></div>
+    </div>
+  </div>
+
+  <div class="section-divider"><span>—</span></div>
+
+  <!-- ════════════════════════════════════
+       03 · BANNER 2 (Square)
+  ═════════════════════════════════════ -->
+  <div class="artwork-section" id="section-banner2">
+    <div class="section-header">
+      <div>
+        <div class="section-tag">Artwork 03</div>
+        <h2 class="section-title">Banner — Square Social</h2>
+        <div class="spec-chips">
+          <span class="chip gold">Instagram Post</span>
+          <span class="chip">1080 × 1080 px</span>
+          <span class="chip">Instagram · Facebook</span>
+        </div>
+      </div>
+      <div class="section-meta">เลือก 1 ตัวเลือก</div>
+    </div>
+    <div class="artwork-info">
+      <p style="font-size:0.8rem;color:var(--grey);max-width:560px">
+        แบนเนอร์สี่เหลี่ยมสำหรับ Instagram Feed และ Facebook Post
+        ออกแบบให้โดดเด่นใน Feed พร้อมสื่อ Premium Brand Identity
+      </p>
+    </div>
+    <div class="design-grid" id="grid-banner2">
+      <div class="design-card" onclick="selectCard('banner2',0,this)">
+        <img src="https://design.canva.ai/rslbe_UbimByytp" alt="Banner 2 Option A" loading="lazy">
+        <div class="card-footer">
+          <span class="card-num">Option A</span>
+          <a href="https://www.canva.com/d/aUc54uVe0uTiJ4X" target="_blank" class="card-link">เปิดใน Canva ↗</a>
+        </div>
+      </div>
+      <div class="design-card" onclick="selectCard('banner2',1,this)">
+        <img src="https://design.canva.ai/PTPfZtAH8lO2xXB" alt="Banner 2 Option B" loading="lazy">
+        <div class="card-footer">
+          <span class="card-num">Option B</span>
+          <a href="https://www.canva.com/d/kzolnA92p4bXwas" target="_blank" class="card-link">เปิดใน Canva ↗</a>
+        </div>
+      </div>
+      <div class="design-card" onclick="selectCard('banner2',2,this)">
+        <img src="https://design.canva.ai/yqru53aSdBOZC0Q" alt="Banner 2 Option C" loading="lazy">
+        <div class="card-footer">
+          <span class="card-num">Option C</span>
+          <a href="https://www.canva.com/d/SE2ACKCLSe2jEnD" target="_blank" class="card-link">เปิดใน Canva ↗</a>
+        </div>
+      </div>
+      <div class="design-card" onclick="selectCard('banner2',3,this)">
+        <img src="https://design.canva.ai/6fK-FZF_es_lBCF" alt="Banner 2 Option D" loading="lazy">
+        <div class="card-footer">
+          <span class="card-num">Option D</span>
+          <a href="https://www.canva.com/d/YjG_EifWSrfOu5a" target="_blank" class="card-link">เปิดใน Canva ↗</a>
+        </div>
+      </div>
+    </div>
+    <div class="comment-panel">
+      <h4>ส่งคอมเม้นต์ — Banner Square Feedback</h4>
+      <p class="hint">เลือกตัวเลือกที่ชอบด้านบนก่อน แล้วแจ้งรายละเอียดที่ต้องการแก้ไข</p>
+      <div class="feedback-grid">
+        <div class="feedback-item">
+          <label>ตัวเลือกที่เลือก</label>
+          <select id="sel-banner2">
+            <option value="">— กรุณาเลือก —</option>
+            <option>Option A</option><option>Option B</option>
+            <option>Option C</option><option>Option D</option>
+          </select>
+        </div>
+        <div class="feedback-item">
+          <label>สิ่งที่ต้องการแก้ไข</label>
+          <select id="type-banner2">
+            <option value="">— ประเภท —</option>
+            <option>สี (Color)</option>
+            <option>ฟ้อนต์ / ข้อความ (Typography)</option>
+            <option>Layout / การจัด</option>
+            <option>รูปภาพ / Elements</option>
+            <option>ข้อความเนื้อหา (Copy)</option>
+            <option>อื่นๆ</option>
+          </select>
+        </div>
+      </div>
+      <textarea class="comment-box" id="comment-banner2" placeholder="พิมพ์คอมเม้นต์ที่นี่..."></textarea>
+      <div class="comment-actions">
+        <div class="approval-group">
+          <label>สถานะ:</label>
+          <button class="approval-btn approve" onclick="setStatus('banner2','approve',this)">✓ อนุมัติ</button>
+          <button class="approval-btn revise" onclick="setStatus('banner2','revise',this)">↻ แก้ไข</button>
+          <button class="approval-btn reject" onclick="setStatus('banner2','reject',this)">✕ ปฏิเสธ</button>
+        </div>
+        <button class="submit-btn" onclick="submitComment('banner2')">ส่งคอมเม้นต์</button>
+      </div>
+      <div class="saved-comments" id="saved-banner2"></div>
+    </div>
+  </div>
+
+  <div class="section-divider"><span>—</span></div>
+
+  <!-- ════════════════════════════════════
+       04 · INFOGRAPHIC
+  ═════════════════════════════════════ -->
+  <div class="artwork-section" id="section-info">
+    <div class="section-header">
+      <div>
+        <div class="section-tag">Artwork 04</div>
+        <h2 class="section-title">CI Guide Infographic</h2>
+        <div class="spec-chips">
+          <span class="chip gold">Infographic</span>
+          <span class="chip">800 × 2000 px</span>
+          <span class="chip">Brand Guidelines Visual</span>
+        </div>
+      </div>
+      <div class="section-meta">เลือก 1 ตัวเลือก</div>
+    </div>
+    <div class="artwork-info">
+      <p style="font-size:0.8rem;color:var(--grey);max-width:560px">
+        Infographic สรุป CI Guide ของ DHThailand ครบในชิ้นเดียว
+        ได้แก่ Brand Colors · Typography · Logo Usage · Brand Values · Tone of Voice
+      </p>
+    </div>
+    <div class="design-grid" id="grid-info">
+      <div class="design-card" onclick="selectCard('info',0,this)">
+        <img src="https://design.canva.ai/dolUBQ753hpiG2Y" alt="Infographic Option A" loading="lazy">
+        <div class="card-footer">
+          <span class="card-num">Option A</span>
+          <a href="https://www.canva.com/d/GdL_x9hQ2bF48ud" target="_blank" class="card-link">เปิดใน Canva ↗</a>
+        </div>
+      </div>
+      <div class="design-card" onclick="selectCard('info',1,this)">
+        <img src="https://design.canva.ai/m1fj5s5bZUKqog9" alt="Infographic Option B" loading="lazy">
+        <div class="card-footer">
+          <span class="card-num">Option B</span>
+          <a href="https://www.canva.com/d/GGBa7Pb8JmB9v35" target="_blank" class="card-link">เปิดใน Canva ↗</a>
+        </div>
+      </div>
+      <div class="design-card" onclick="selectCard('info',2,this)">
+        <img src="https://design.canva.ai/mAgrmGVZfu71Jwx" alt="Infographic Option C" loading="lazy">
+        <div class="card-footer">
+          <span class="card-num">Option C</span>
+          <a href="https://www.canva.com/d/xygTee8xTZFN1qM" target="_blank" class="card-link">เปิดใน Canva ↗</a>
+        </div>
+      </div>
+      <div class="design-card" onclick="selectCard('info',3,this)">
+        <img src="https://design.canva.ai/rFCok9lIFccYqS6" alt="Infographic Option D" loading="lazy">
+        <div class="card-footer">
+          <span class="card-num">Option D</span>
+          <a href="https://www.canva.com/d/mUgklMIb5-SaoEX" target="_blank" class="card-link">เปิดใน Canva ↗</a>
+        </div>
+      </div>
+    </div>
+    <div class="comment-panel">
+      <h4>ส่งคอมเม้นต์ — Infographic Feedback</h4>
+      <p class="hint">เลือกตัวเลือกที่ชอบด้านบนก่อน แล้วแจ้งรายละเอียดที่ต้องการแก้ไข</p>
+      <div class="feedback-grid">
+        <div class="feedback-item">
+          <label>ตัวเลือกที่เลือก</label>
+          <select id="sel-info">
+            <option value="">— กรุณาเลือก —</option>
+            <option>Option A</option><option>Option B</option>
+            <option>Option C</option><option>Option D</option>
+          </select>
+        </div>
+        <div class="feedback-item">
+          <label>สิ่งที่ต้องการแก้ไข</label>
+          <select id="type-info">
+            <option value="">— ประเภท —</option>
+            <option>สี (Color)</option>
+            <option>ฟ้อนต์ / ข้อความ (Typography)</option>
+            <option>Layout / การจัด</option>
+            <option>ข้อมูล / Content</option>
+            <option>Icons / Elements</option>
+            <option>อื่นๆ</option>
+          </select>
+        </div>
+      </div>
+      <textarea class="comment-box" id="comment-info" placeholder="พิมพ์คอมเม้นต์ที่นี่..."></textarea>
+      <div class="comment-actions">
+        <div class="approval-group">
+          <label>สถานะ:</label>
+          <button class="approval-btn approve" onclick="setStatus('info','approve',this)">✓ อนุมัติ</button>
+          <button class="approval-btn revise" onclick="setStatus('info','revise',this)">↻ แก้ไข</button>
+          <button class="approval-btn reject" onclick="setStatus('info','reject',this)">✕ ปฏิเสธ</button>
+        </div>
+        <button class="submit-btn" onclick="submitComment('info')">ส่งคอมเม้นต์</button>
+      </div>
+      <div class="saved-comments" id="saved-info"></div>
+    </div>
+  </div>
+
+  <div class="section-divider"><span>— สรุปการตรวจสอบ —</span></div>
+
+  <!-- ════════════════════════════════════
+       OVERALL COMMENT
+  ═════════════════════════════════════ -->
+  <div class="comment-panel" style="margin-bottom:32px">
+    <h4>คอมเม้นต์ภาพรวม — Overall Feedback</h4>
+    <p class="hint">ความเห็นรวมสำหรับทุก Artwork หรือเรื่อง CI ทั้งหมด</p>
+    <textarea class="comment-box" id="comment-overall" style="min-height:120px"
+      placeholder="เช่น 'ทิศทาง CI โอเค แต่ขอให้ทุกชิ้นใช้สีฟ้าเข้มกว่านี้' หรือ 'ฟ้อนต์ภาษาไทยต้องเป็น DB Airy Std เท่านั้น'"></textarea>
+    <div class="comment-actions">
+      <div></div>
+      <button class="submit-btn" onclick="submitOverall()">ส่งคอมเม้นต์ภาพรวม</button>
+    </div>
+    <div class="saved-comments" id="saved-overall"></div>
+  </div>
+
+  <!-- ════════════════════════════════════
+       SUMMARY
+  ═════════════════════════════════════ -->
+  <div id="summary-panel">
+    <h3>สรุปผลการตรวจสอบ</h3>
+    <div class="summary-grid" id="summary-grid"></div>
+  </div>
+
+  <div style="text-align:center;margin-top:48px">
+    <button class="submit-btn" style="padding:14px 48px;font-size:0.75rem" onclick="generateSummary()">
+      ดูสรุปผลทั้งหมด — Generate Summary
+    </button>
+  </div>
+
+</main>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <strong>DHThailand</strong> · Artwork Review Board · Draft v1.0 · 2026<br>
+  <span style="margin-top:6px;display:block">Font: DB Airy Std v3.2.1 · Style: Pinterest Luxury · CI Guide</span>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const state = {
+  poster:  { selected: null, status: null, comments: [] },
+  banner1: { selected: null, status: null, comments: [] },
+  banner2: { selected: null, status: null, comments: [] },
+  info:    { selected: null, status: null, comments: [] },
+};
+const labels = {
+  poster:'Brand Poster', banner1:'Banner Wide', banner2:'Banner Square', info:'CI Infographic'
+};
+
+function selectCard(section, idx, el) {
+  document.querySelectorAll(`#grid-${section} .design-card`).forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state[section].selected = idx;
+  const opts = ['A','B','C','D'];
+  document.getElementById(`sel-${section}`).value = 'Option ' + opts[idx];
+  showToast(`เลือก Option ${opts[idx]} สำหรับ ${labels[section]} แล้ว`);
+}
+
+function setStatus(section, status, btn) {
+  const panel = btn.closest('.comment-panel');
+  panel.querySelectorAll('.approval-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  state[section].status = status;
+}
+
+function submitComment(section) {
+  const comment = document.getElementById(`comment-${section}`).value.trim();
+  const selected = document.getElementById(`sel-${section}`).value;
+  const type     = document.getElementById(`type-${section}`).value;
+  if (!comment && !state[section].status) { showToast('กรุณาใส่คอมเม้นต์หรือเลือกสถานะก่อน'); return; }
+
+  const timestamp = new Date().toLocaleString('th-TH', {
+    year:'2-digit', month:'2-digit', day:'2-digit',
+    hour:'2-digit', minute:'2-digit'
+  });
+  const statusMap = { approve:'อนุมัติ', revise:'แก้ไข', reject:'ปฏิเสธ', null:'—' };
+  const badgeClass = state[section].status || 'revise';
+
+  const entry = { comment, selected, type, status: state[section].status, timestamp };
+  state[section].comments.push(entry);
+
+  const container = document.getElementById(`saved-${section}`);
+  const div = document.createElement('div');
+  div.className = 'saved-comment';
+  div.innerHTML = `
+    <div class="meta">
+      <span>${timestamp}</span>
+      ${selected ? `<span>${selected}</span>` : ''}
+      ${type ? `<span>${type}</span>` : ''}
+      <span class="badge ${badgeClass}">${statusMap[state[section].status]}</span>
+    </div>
+    <div>${comment || '(ไม่มีข้อความ)'}</div>
+  `;
+  container.appendChild(div);
+
+  document.getElementById(`comment-${section}`).value = '';
+  showToast('บันทึกคอมเม้นต์แล้ว ✓');
+}
+
+function submitOverall() {
+  const comment = document.getElementById('comment-overall').value.trim();
+  if (!comment) { showToast('กรุณาใส่คอมเม้นต์ก่อน'); return; }
+  const timestamp = new Date().toLocaleString('th-TH', {
+    year:'2-digit', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit'
+  });
+  const container = document.getElementById('saved-overall');
+  const div = document.createElement('div');
+  div.className = 'saved-comment';
+  div.innerHTML = `<div class="meta"><span>${timestamp}</span><span class="badge revise">ภาพรวม</span></div><div>${comment}</div>`;
+  container.appendChild(div);
+  document.getElementById('comment-overall').value = '';
+  showToast('บันทึกคอมเม้นต์ภาพรวมแล้ว ✓');
+}
+
+function generateSummary() {
+  const panel = document.getElementById('summary-panel');
+  const grid  = document.getElementById('summary-grid');
+  const statusLabel = { approve:'✓ อนุมัติ', revise:'↻ แก้ไข', reject:'✕ ปฏิเสธ', null:'— รอดำเนินการ' };
+  const statusColor = { approve:'#4CAF50', revise:'#E8A020', reject:'#C0392B', null:'#8A8A8A' };
+  const opts = ['A','B','C','D'];
+
+  grid.innerHTML = '';
+  Object.entries(state).forEach(([key, val]) => {
+    const card = document.createElement('div');
+    card.className = 'summary-card';
+    card.innerHTML = `
+      <div class="label">${labels[key]}</div>
+      <div class="value">${val.selected !== null ? 'Option ' + opts[val.selected] : '— ยังไม่เลือก'}</div>
+      <div class="status-text" style="color:${statusColor[val.status]}">${statusLabel[val.status]}</div>
+      <div class="label" style="margin-top:8px">${val.comments.length} คอมเม้นต์</div>
+    `;
+    grid.appendChild(card);
+  });
+  panel.style.display = 'block';
+  panel.scrollIntoView({ behavior: 'smooth' });
+  showToast('สร้างสรุปผลแล้ว ✓');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>
