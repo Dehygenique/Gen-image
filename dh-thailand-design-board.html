@@ -3,988 +3,961 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DH Thailand — Design Review Board</title>
+<title>De Hygienique Thailand — Design Review Board</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&display=swap');
+
   :root {
     --primary: #49785d;
     --secondary: #e9a841;
-    --bg: #ffffff;
-    --dark: #1a2e24;
-    --light-green: #edf4f0;
+    --dark: #1c3326;
+    --mid: #2d5042;
+    --light: #edf4f0;
+    --bg: #f2f5f3;
     --gray: #6b7280;
-    --border: #e5e7eb;
+    --border: #d1ddd7;
+    --font: 'DB Airy', 'DBOzoneX', 'Sarabun', 'Noto Sans Thai', sans-serif;
   }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-    background: #f4f6f5;
-    color: #1a2e24;
-  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: var(--font); background: var(--bg); color: var(--dark); }
 
-  /* ── PAGE HEADER ── */
+  /* PAGE HEADER */
   .page-header {
     background: var(--dark);
-    padding: 28px 48px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    padding: 24px 48px;
+    display: flex; align-items: center; justify-content: space-between;
     border-bottom: 3px solid var(--secondary);
   }
-  .page-header h1 { color: #fff; font-size: 20px; font-weight: 700; letter-spacing: .04em; }
-  .page-header span { color: var(--secondary); font-size: 13px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; }
+  .page-header h1 { color: #fff; font-size: 18px; font-weight: 700; letter-spacing:.04em; }
+  .page-header span { color: var(--secondary); font-size: 12px; font-weight: 500; letter-spacing:.12em; text-transform: uppercase; }
 
-  /* ── BOARD CONTAINER ── */
-  .board {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 48px 32px 80px;
-  }
+  /* BOARD */
+  .board { max-width: 1300px; margin: 0 auto; padding: 48px 32px 80px; }
+  .section-label { font-size:11px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--secondary); margin-bottom:10px; }
+  .section-title { font-size:20px; font-weight:700; color:var(--dark); margin-bottom:28px; padding-bottom:12px; border-bottom:1px solid var(--border); }
 
-  .section-label {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: .18em;
-    text-transform: uppercase;
-    color: var(--secondary);
-    margin-bottom: 12px;
-  }
-  .section-title {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--dark);
-    margin-bottom: 32px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--border);
-  }
+  /* CARD */
+  .design-card { background:#fff; border-radius:12px; box-shadow:0 2px 20px rgba(0,0,0,.07),0 0 0 1px rgba(0,0,0,.04); margin-bottom:48px; overflow:hidden; }
+  .design-card-header { padding:14px 22px; background:#f8faf9; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; }
+  .dot { width:10px; height:10px; border-radius:50%; }
+  .dot-r{background:#ef4444;} .dot-y{background:#f59e0b;} .dot-g{background:#22c55e;}
+  .card-label { font-size:13px; font-weight:600; color:var(--gray); margin-left:8px; }
+  .card-size  { font-size:11px; color:#9ca3af; margin-left:auto; }
+  .design-canvas { display:flex; justify-content:center; align-items:center; padding:32px; background:#dde5e1; }
+  .design-canvas svg { max-width:100%; height:auto; display:block; border-radius:6px; box-shadow:0 4px 24px rgba(0,0,0,.15); }
 
-  /* ── DESIGN CARD ── */
-  .design-card {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 16px rgba(0,0,0,.07), 0 0 0 1px rgba(0,0,0,.04);
-    margin-bottom: 48px;
-    overflow: hidden;
+  /* COMMENT SECTION */
+  .comment-section { background:#fff; border-radius:12px; box-shadow:0 2px 20px rgba(0,0,0,.07),0 0 0 1px rgba(0,0,0,.04); padding:40px; margin-top:16px; }
+  .comment-section h2 { font-size:18px; font-weight:700; color:var(--dark); margin-bottom:6px; }
+  .comment-section .subtitle { font-size:13px; color:var(--gray); margin-bottom:28px; }
+  .comment-form { display:flex; flex-direction:column; gap:18px; }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  .form-group { display:flex; flex-direction:column; gap:5px; }
+  .form-group label { font-size:11px; font-weight:700; color:var(--dark); letter-spacing:.06em; text-transform:uppercase; }
+  .form-group input,.form-group select,.form-group textarea {
+    padding:10px 13px; border:1.5px solid var(--border); border-radius:8px;
+    font-size:14px; color:var(--dark); font-family:var(--font); background:#fafafa;
+    transition:border .2s,box-shadow .2s; resize:vertical;
   }
-  .design-card-header {
-    padding: 16px 24px;
-    background: #f9fafb;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  .form-group input:focus,.form-group select:focus,.form-group textarea:focus {
+    outline:none; border-color:var(--primary); box-shadow:0 0 0 3px rgba(73,120,93,.12); background:#fff;
   }
-  .design-card-header .dot { width: 10px; height: 10px; border-radius: 50%; }
-  .dot-r { background: #ef4444; } .dot-y { background: #f59e0b; } .dot-g { background: #22c55e; }
-  .design-card-header .label { font-size: 13px; font-weight: 600; color: var(--gray); margin-left: 8px; }
-  .design-card-header .size  { font-size: 11px; color: #9ca3af; margin-left: auto; }
-  .design-canvas {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 32px;
-    background: #e8eceb;
-  }
-  .design-canvas svg { max-width: 100%; height: auto; display: block; border-radius: 4px; }
-
-  /* ── COMMENT SECTION ── */
-  .comment-section {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 16px rgba(0,0,0,.07), 0 0 0 1px rgba(0,0,0,.04);
-    padding: 40px 40px 48px;
-    margin-top: 16px;
-  }
-  .comment-section h2 {
-    font-size: 18px; font-weight: 700; color: var(--dark);
-    margin-bottom: 6px;
-  }
-  .comment-section p.subtitle {
-    font-size: 13px; color: var(--gray); margin-bottom: 32px;
-  }
-
-  .comment-form { display: flex; flex-direction: column; gap: 20px; }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  .form-group { display: flex; flex-direction: column; gap: 6px; }
-  .form-group label {
-    font-size: 12px; font-weight: 600; color: var(--dark);
-    letter-spacing: .04em; text-transform: uppercase;
-  }
-  .form-group input,
-  .form-group select,
-  .form-group textarea {
-    padding: 11px 14px;
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    font-size: 14px;
-    color: var(--dark);
-    font-family: inherit;
-    background: #fafafa;
-    transition: border .2s, box-shadow .2s;
-    resize: vertical;
-  }
-  .form-group input:focus,
-  .form-group select:focus,
-  .form-group textarea:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(73,120,93,.12);
-    background: #fff;
-  }
-  .form-group textarea { min-height: 120px; }
-
-  .tag-group { display: flex; flex-wrap: wrap; gap: 8px; }
-  .tag {
-    padding: 6px 14px;
-    border: 1.5px solid var(--border);
-    border-radius: 20px;
-    font-size: 12px;
-    cursor: pointer;
-    user-select: none;
-    transition: all .15s;
-    color: var(--gray);
-    background: #fff;
-  }
-  .tag:hover { border-color: var(--primary); color: var(--primary); }
-  .tag.active { border-color: var(--primary); background: var(--primary); color: #fff; }
-
-  .btn-submit {
-    align-self: flex-start;
-    padding: 13px 32px;
-    background: var(--primary);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    letter-spacing: .04em;
-    transition: background .2s, transform .1s;
-  }
-  .btn-submit:hover { background: var(--dark); transform: translateY(-1px); }
-  .btn-submit:active { transform: translateY(0); }
-
-  /* ── PREVIOUS COMMENTS ── */
-  .comments-list { margin-top: 40px; display: flex; flex-direction: column; gap: 16px; }
-  .comment-item {
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--secondary);
-    border-radius: 8px;
-    padding: 16px 20px;
-    background: #fffdf7;
-  }
-  .comment-meta {
-    display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
-  }
-  .comment-avatar {
-    width: 32px; height: 32px; border-radius: 50%;
-    background: var(--primary);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 700; color: #fff;
-  }
-  .comment-author { font-size: 13px; font-weight: 700; color: var(--dark); }
-  .comment-time   { font-size: 11px; color: #9ca3af; margin-left: auto; }
-  .comment-text   { font-size: 13px; color: #4b5563; line-height: 1.6; }
-  .comment-tag {
-    display: inline-block; margin-top: 8px;
-    padding: 3px 10px; border-radius: 12px;
-    font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
-    background: var(--light-green); color: var(--primary);
-  }
-
-  /* ── DIVIDER ── */
-  .divider { height: 1px; background: var(--border); margin: 40px 0; }
+  .form-group textarea { min-height:110px; }
+  .tag-group { display:flex; flex-wrap:wrap; gap:8px; }
+  .tag { padding:5px 13px; border:1.5px solid var(--border); border-radius:20px; font-size:12px;
+    cursor:pointer; user-select:none; transition:all .15s; color:var(--gray); background:#fff; }
+  .tag:hover { border-color:var(--primary); color:var(--primary); }
+  .tag.active { border-color:var(--primary); background:var(--primary); color:#fff; }
+  .btn-submit { align-self:flex-start; padding:12px 30px; background:var(--primary); color:#fff;
+    border:none; border-radius:8px; font-size:14px; font-weight:700; cursor:pointer;
+    letter-spacing:.04em; transition:background .2s,transform .1s; font-family:var(--font); }
+  .btn-submit:hover { background:var(--dark); transform:translateY(-1px); }
+  .comments-list { margin-top:36px; display:flex; flex-direction:column; gap:14px; }
+  .comment-item { border:1px solid var(--border); border-left:3px solid var(--secondary); border-radius:8px; padding:14px 18px; background:#fffdf7; }
+  .comment-meta { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+  .comment-avatar { width:30px; height:30px; border-radius:50%; background:var(--primary); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; }
+  .comment-author { font-size:13px; font-weight:700; color:var(--dark); }
+  .comment-time   { font-size:11px; color:#9ca3af; margin-left:auto; }
+  .comment-text   { font-size:13px; color:#4b5563; line-height:1.65; }
+  .comment-tag    { display:inline-block; margin-top:8px; padding:3px 10px; border-radius:12px; font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; background:var(--light); color:var(--primary); }
+  .divider { height:1px; background:var(--border); margin:40px 0; }
 </style>
 </head>
 <body>
 
-<!-- PAGE HEADER -->
 <div class="page-header">
-  <h1>DH Thailand — Design Review Board</h1>
-  <span>Brand CI · Version 1.0 · June 2026</span>
+  <h1>De Hygienique Thailand — Design Review Board v2.0</h1>
+  <span>Brand CI · Hygiene Services · June 2026</span>
 </div>
 
 <div class="board">
 
-  <!-- ═══════════════════════════════════════════════
-       PIECE 1 : WEB BANNER (HERO)
-  ════════════════════════════════════════════════ -->
-  <p class="section-label">Design Asset 01</p>
-  <h2 class="section-title">Web Banner — Hero Section &nbsp;·&nbsp; 1200 × 480 px</h2>
-
-  <div class="design-card">
-    <div class="design-card-header">
-      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
-      <span class="label">hero-banner.svg</span>
-      <span class="size">1200 × 480 px</span>
-    </div>
-    <div class="design-canvas">
-<svg width="1200" height="480" viewBox="0 0 1200 480" xmlns="http://www.w3.org/2000/svg" style="border-radius:8px;">
+<!-- ══════════════════════════════════════════════
+     ASSET 01 — WEB BANNER HERO 1200×480
+════════════════════════════════════════════════ -->
+<p class="section-label">Design Asset 01</p>
+<h2 class="section-title">Web Banner — Hero Section · 1200 × 480 px</h2>
+<div class="design-card">
+  <div class="design-card-header">
+    <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+    <span class="card-label">hero-banner.svg</span><span class="card-size">1200 × 480 px</span>
+  </div>
+  <div class="design-canvas">
+<svg width="1200" height="480" viewBox="0 0 1200 480" xmlns="http://www.w3.org/2000/svg" style="font-family:'DB Airy','Sarabun','Noto Sans Thai',sans-serif;">
   <defs>
-    <!-- Main dark green gradient background -->
-    <linearGradient id="bg1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1a2e24"/>
-      <stop offset="60%" stop-color="#2d5042"/>
-      <stop offset="100%" stop-color="#49785d"/>
+    <linearGradient id="h-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1c3326"/>
+      <stop offset="55%" stop-color="#2d5042"/>
+      <stop offset="100%" stop-color="#3b6550"/>
     </linearGradient>
-    <!-- Gold shimmer -->
-    <linearGradient id="gold1" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#e9a841"/>
+    <linearGradient id="h-gold" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#c8891e"/>
       <stop offset="50%" stop-color="#f5c96a"/>
-      <stop offset="100%" stop-color="#e9a841"/>
+      <stop offset="100%" stop-color="#c8891e"/>
     </linearGradient>
-    <!-- Right panel -->
-    <linearGradient id="panel1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#3b6650"/>
-      <stop offset="100%" stop-color="#1a2e24"/>
+    <linearGradient id="h-panel" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b6550" stop-opacity=".9"/>
+      <stop offset="100%" stop-color="#1c3326" stop-opacity=".95"/>
     </linearGradient>
-    <!-- Subtle glow -->
-    <radialGradient id="glow1" cx="75%" cy="50%" r="40%">
+    <radialGradient id="h-glow" cx="78%" cy="40%" r="45%">
+      <stop offset="0%" stop-color="#e9a841" stop-opacity=".1"/>
+      <stop offset="100%" stop-color="#e9a841" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="h-blur"><feGaussianBlur stdDeviation="22"/></filter>
+    <filter id="h-shadow"><feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="#000" flood-opacity=".3"/></filter>
+    <clipPath id="h-clip"><rect width="1200" height="480" rx="6"/></clipPath>
+  </defs>
+  <g clip-path="url(#h-clip)">
+    <!-- BG -->
+    <rect width="1200" height="480" fill="url(#h-bg)"/>
+    <rect width="1200" height="480" fill="url(#h-glow)"/>
+
+    <!-- Right side illustration area — wave / abstract clean surface -->
+    <!-- Subtle circular lines — representing sanitizing waves -->
+    <circle cx="920" cy="240" r="320" fill="none" stroke="#49785d" stroke-width="1" opacity=".25"/>
+    <circle cx="920" cy="240" r="250" fill="none" stroke="#e9a841" stroke-width=".8" opacity=".2"/>
+    <circle cx="920" cy="240" r="180" fill="none" stroke="#49785d" stroke-width=".6" opacity=".2"/>
+    <circle cx="920" cy="240" r="110" fill="none" stroke="#e9a841" stroke-width=".5" opacity=".18"/>
+
+    <!-- Blurred glows -->
+    <circle cx="1020" cy="350" r="200" fill="#e9a841" opacity=".06" filter="url(#h-blur)"/>
+    <circle cx="820"  cy="100" r="140" fill="#49785d" opacity=".2"  filter="url(#h-blur)"/>
+
+    <!-- Illustration: Abstract sofa / upholstery shape (right zone) -->
+    <!-- Sofa base -->
+    <rect x="720" y="270" width="340" height="80"  rx="18" fill="#3b6550" opacity=".75"/>
+    <!-- Sofa cushions -->
+    <rect x="730" y="210" width="150" height="75"  rx="14" fill="#3b6550" opacity=".85"/>
+    <rect x="896" y="210" width="150" height="75"  rx="14" fill="#3b6550" opacity=".85"/>
+    <!-- Sofa back -->
+    <rect x="716" y="180" width="350" height="50"  rx="12" fill="#2d5042" opacity=".8"/>
+    <!-- Sofa arm left -->
+    <rect x="706" y="190" width="28"  height="115" rx="10" fill="#2d5042" opacity=".8"/>
+    <!-- Sofa arm right -->
+    <rect x="1048" y="190" width="28" height="115" rx="10" fill="#2d5042" opacity=".8"/>
+    <!-- Sofa legs -->
+    <rect x="740" y="348" width="14" height="28" rx="4" fill="#1c3326" opacity=".6"/>
+    <rect x="1028" y="348" width="14" height="28" rx="4" fill="#1c3326" opacity=".6"/>
+
+    <!-- Mattress stack behind sofa (upper right) -->
+    <rect x="850" y="80"  width="240" height="40" rx="6" fill="#2d5042" opacity=".5"/>
+    <rect x="850" y="70"  width="240" height="16" rx="4" fill="#49785d" opacity=".4"/>
+    <rect x="850" y="60"  width="240" height="16" rx="4" fill="#3b6550" opacity=".35"/>
+    <!-- Cushion lines on mattress -->
+    <line x1="930" y1="80" x2="930" y2="120" stroke="#e9a841" stroke-width=".6" opacity=".3"/>
+    <line x1="1010" y1="80" x2="1010" y2="120" stroke="#e9a841" stroke-width=".6" opacity=".3"/>
+
+    <!-- Sparkle / clean particles -->
+    <g opacity=".7">
+      <polygon points="792,160 795,150 798,160 808,163 798,166 795,176 792,166 782,163" fill="#e9a841" opacity=".6"/>
+      <polygon points="1072,200 1074,193 1076,200 1083,202 1076,204 1074,211 1072,204 1065,202" fill="#e9a841" opacity=".5"/>
+      <polygon points="1100,140 1102,133 1104,140 1111,142 1104,144 1102,151 1100,144 1093,142" fill="#e9a841" opacity=".4"/>
+      <circle cx="770" cy="130" r="3" fill="#e9a841" opacity=".5"/>
+      <circle cx="1130" cy="250" r="2" fill="#e9a841" opacity=".4"/>
+      <circle cx="1080" cy="310" r="2.5" fill="#f5c96a" opacity=".4"/>
+    </g>
+
+    <!-- Dust mite icon (abstract — small x marks representing mites being killed) -->
+    <g transform="translate(808, 240)" opacity=".5">
+      <line x1="0" y1="0" x2="10" y2="10" stroke="#e9a841" stroke-width="2" stroke-linecap="round"/>
+      <line x1="10" y1="0" x2="0" y2="10" stroke="#e9a841" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="5" cy="5" r="9" fill="none" stroke="#e9a841" stroke-width="1.2"/>
+      <line x1="5" y1="-14" x2="5" y2="-8" stroke="#e9a841" stroke-width="1.5" stroke-linecap="round"/>
+    </g>
+
+    <!-- Vertical gold accent line (divider) -->
+    <rect x="680" y="48" width="1.5" height="384" rx="1" fill="url(#h-gold)" opacity=".5"/>
+
+    <!-- LEFT CONTENT ZONE -->
+
+    <!-- Logo mark — hexagonal badge -->
+    <g transform="translate(64, 44)">
+      <polygon points="34,0 68,20 68,56 34,76 0,56 0,20" fill="url(#h-panel)" stroke="url(#h-gold)" stroke-width="1.5"/>
+      <!-- Droplet / hygiene icon inside -->
+      <path d="M34,18 Q42,32 42,42 A8,8 0 0,1 26,42 Q26,32 34,18 Z"
+            fill="url(#h-gold)" opacity=".9"/>
+      <ellipse cx="30" cy="43" rx="4" ry="2.5" fill="#fff" opacity=".25"/>
+    </g>
+    <!-- Brand name next to logo -->
+    <text x="148" y="68" font-size="11" fill="#e9a841" letter-spacing="5" opacity=".9" font-weight="400">DE HYGIENIQUE THAILAND</text>
+    <text x="148" y="86" font-size="9"  fill="#6fa085" letter-spacing="3">ดี ไฮจีนิค (ประเทศไทย)</text>
+
+    <!-- Gold rule -->
+    <rect x="64" y="140" width="56" height="2" rx="1" fill="url(#h-gold)"/>
+
+    <!-- No.1 badge -->
+    <g transform="translate(64, 148)">
+      <rect width="138" height="26" rx="13" fill="url(#h-gold)" opacity=".95"/>
+      <text x="69" y="18" font-size="10" fill="#1c3326" text-anchor="middle" font-weight="700" letter-spacing="1.5">THAILAND'S NO.1</text>
+    </g>
+
+    <!-- Main headline TH -->
+    <text x="64" y="228" font-size="50" font-weight="800" fill="#ffffff" letter-spacing="-.5">บริการทำความสะอาด</text>
+    <text x="64" y="286" font-size="50" font-weight="800" fill="url(#h-gold)">และสุขอนามัยครบวงจร</text>
+
+    <!-- Sub EN -->
+    <text x="64" y="328" font-size="15" fill="#a8c4b4" letter-spacing=".5" font-weight="300">Total Indoor Hygiene Solution — Powered by Potema® Germany</text>
+
+    <!-- Key benefits pills -->
+    <g transform="translate(64, 346)">
+      <rect width="92" height="24" rx="12" fill="#49785d" opacity=".7"/>
+      <text x="46" y="16" font-size="10" fill="#fff" text-anchor="middle" letter-spacing=".5">ไม่ใช้สารเคมี</text>
+    </g>
+    <g transform="translate(166, 346)">
+      <rect width="92" height="24" rx="12" fill="#49785d" opacity=".7"/>
+      <text x="46" y="16" font-size="10" fill="#fff" text-anchor="middle" letter-spacing=".5">แห้งทันที</text>
+    </g>
+    <g transform="translate(268, 346)">
+      <rect width="120" height="24" rx="12" fill="#49785d" opacity=".7"/>
+      <text x="60" y="16" font-size="10" fill="#fff" text-anchor="middle" letter-spacing=".5">รับประกัน 100%</text>
+    </g>
+    <g transform="translate(398, 346)">
+      <rect width="140" height="24" rx="12" fill="#49785d" opacity=".7"/>
+      <text x="70" y="16" font-size="10" fill="#fff" text-anchor="middle" letter-spacing=".5">เทคโนโลยีจากเยอรมนี</text>
+    </g>
+
+    <!-- CTA buttons -->
+    <g transform="translate(64, 390)">
+      <rect width="192" height="46" rx="23" fill="url(#h-gold)" filter="url(#h-shadow)"/>
+      <text x="96" y="29" font-size="14" fill="#1c3326" text-anchor="middle" font-weight="700" letter-spacing="1">นัดหมายทำความสะอาด</text>
+    </g>
+    <g transform="translate(268, 390)">
+      <rect width="180" height="46" rx="23" fill="none" stroke="#e9a841" stroke-width="1.5"/>
+      <text x="90" y="29" font-size="14" fill="#e9a841" text-anchor="middle" font-weight="600" letter-spacing="1">ดูบริการทั้งหมด</text>
+    </g>
+
+    <!-- Bottom bar -->
+    <rect x="0" y="450" width="1200" height="30" fill="#1c3326" opacity=".8"/>
+    <rect x="0" y="450" width="1200" height="1.5" fill="url(#h-gold)" opacity=".6"/>
+    <text x="64" y="471" font-size="10" fill="#6fa085" letter-spacing="3.5">ที่นอน · โซฟา · พรม · ผ้าม่าน · รถยนต์ · โดรนล้างกระจก · ฆ่าเชื้อโรค · กำจัดปลวก</text>
+    <text x="1136" y="471" font-size="10" fill="#e9a841" letter-spacing="1" text-anchor="end">dh-thailand.com</text>
+  </g>
+</svg>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     ASSET 02 — PROMOTIONAL POSTER 800×1000
+════════════════════════════════════════════════ -->
+<p class="section-label">Design Asset 02</p>
+<h2 class="section-title">Promotional Poster — Social Media · 800 × 1000 px</h2>
+<div class="design-card">
+  <div class="design-card-header">
+    <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+    <span class="card-label">poster-promo.svg</span><span class="card-size">800 × 1000 px</span>
+  </div>
+  <div class="design-canvas">
+<svg width="800" height="1000" viewBox="0 0 800 1000" xmlns="http://www.w3.org/2000/svg" style="font-family:'DB Airy','Sarabun','Noto Sans Thai',sans-serif;">
+  <defs>
+    <linearGradient id="p-bg" x1="0%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#1c3326"/>
+      <stop offset="100%" stop-color="#2d5042"/>
+    </linearGradient>
+    <linearGradient id="p-gold" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#c8891e"/>
+      <stop offset="50%" stop-color="#f5c96a"/>
+      <stop offset="100%" stop-color="#c8891e"/>
+    </linearGradient>
+    <linearGradient id="p-card" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b6550"/>
+      <stop offset="100%" stop-color="#2a4a3a"/>
+    </linearGradient>
+    <radialGradient id="p-glow" cx="50%" cy="20%" r="55%">
       <stop offset="0%" stop-color="#e9a841" stop-opacity=".12"/>
       <stop offset="100%" stop-color="#e9a841" stop-opacity="0"/>
     </radialGradient>
-    <filter id="blur1"><feGaussianBlur stdDeviation="18"/></filter>
-    <filter id="blur2"><feGaussianBlur stdDeviation="6"/></filter>
-    <clipPath id="clip-main"><rect width="1200" height="480" rx="8"/></clipPath>
+    <filter id="p-shadow"><feDropShadow dx="0" dy="4" stdDeviation="10" flood-color="#000" flood-opacity=".25"/></filter>
+    <filter id="p-blur"><feGaussianBlur stdDeviation="24"/></filter>
+    <clipPath id="p-clip"><rect width="800" height="1000" rx="6"/></clipPath>
   </defs>
+  <g clip-path="url(#p-clip)">
+    <rect width="800" height="1000" fill="url(#p-bg)"/>
+    <rect width="800" height="1000" fill="url(#p-glow)"/>
 
-  <g clip-path="url(#clip-main)">
-    <!-- Background -->
-    <rect width="1200" height="480" fill="url(#bg1)"/>
-    <rect width="1200" height="480" fill="url(#glow1)"/>
+    <!-- Deco circles -->
+    <circle cx="700" cy="130" r="200" fill="none" stroke="#e9a841" stroke-width=".8" opacity=".18"/>
+    <circle cx="700" cy="130" r="140" fill="none" stroke="#49785d" stroke-width=".5" opacity=".2"/>
+    <circle cx="100" cy="870" r="160" fill="none" stroke="#49785d" stroke-width=".8" opacity=".22"/>
+    <circle cx="700" cy="100" r="170" fill="#e9a841" opacity=".05" filter="url(#p-blur)"/>
 
-    <!-- Geometric decorator — large circle back -->
-    <circle cx="960" cy="240" r="280" fill="none" stroke="#49785d" stroke-width="1" opacity=".35"/>
-    <circle cx="960" cy="240" r="200" fill="none" stroke="#e9a841" stroke-width=".8" opacity=".25"/>
-    <circle cx="960" cy="240" r="340" fill="none" stroke="#49785d" stroke-width=".5" opacity=".2"/>
+    <!-- Gold top bar -->
+    <rect x="0" y="0" width="800" height="5" fill="url(#p-gold)"/>
 
-    <!-- Large blurred accent blob -->
-    <circle cx="1050" cy="380" r="200" fill="#e9a841" opacity=".07" filter="url(#blur1)"/>
-    <circle cx="900"  cy="80"  r="150" fill="#49785d" opacity=".25" filter="url(#blur1)"/>
+    <!-- LOGO AREA -->
+    <g transform="translate(56, 28)">
+      <polygon points="26,0 52,15 52,43 26,58 0,43 0,15"
+               fill="none" stroke="url(#p-gold)" stroke-width="1.4"/>
+      <path d="M26,12 Q33,22 33,30 A7,7 0 0,1 19,30 Q19,22 26,12 Z" fill="url(#p-gold)" opacity=".9"/>
+      <ellipse cx="23" cy="31" rx="3.5" ry="2" fill="#fff" opacity=".2"/>
+    </g>
+    <text x="112" y="50" font-size="13" fill="#e9a841" letter-spacing="4" font-weight="400">DE HYGIENIQUE</text>
+    <text x="112" y="68" font-size="10" fill="#6fa085" letter-spacing="3">THAILAND</text>
 
-    <!-- Right panel illustration: building silhouette (abstract city) -->
-    <!-- Sky-scraper shapes -->
-    <rect x="780" y="180" width="28" height="220" rx="2" fill="#3b6650" opacity=".6"/>
-    <rect x="814" y="140" width="36" height="260" rx="2" fill="#3b6650" opacity=".7"/>
-    <rect x="856" y="160" width="22" height="240" rx="2" fill="#3b6650" opacity=".55"/>
-    <rect x="884" y="110" width="44" height="290" rx="2" fill="#3b6650" opacity=".75"/>
-    <rect x="934" y="150" width="30" height="250" rx="2" fill="#3b6650" opacity=".6"/>
-    <rect x="970" y="130" width="50" height="270" rx="2" fill="#3b6650" opacity=".8"/>
-    <rect x="1026" y="170" width="26" height="230" rx="2" fill="#3b6650" opacity=".55"/>
-    <rect x="1058" y="120" width="40" height="280" rx="2" fill="#3b6650" opacity=".7"/>
-    <rect x="1104" y="155" width="32" height="245" rx="2" fill="#3b6650" opacity=".6"/>
-    <rect x="1142" y="140" width="58" height="260" rx="2" fill="#3b6650" opacity=".65"/>
-    <!-- Window dots on buildings -->
-    <rect x="820" y="152" width="4" height="4" rx="1" fill="#e9a841" opacity=".5"/>
-    <rect x="828" y="152" width="4" height="4" rx="1" fill="#e9a841" opacity=".4"/>
-    <rect x="820" y="162" width="4" height="4" rx="1" fill="#e9a841" opacity=".3"/>
-    <rect x="890" y="122" width="5" height="5" rx="1" fill="#e9a841" opacity=".6"/>
-    <rect x="900" y="122" width="5" height="5" rx="1" fill="#e9a841" opacity=".4"/>
-    <rect x="890" y="135" width="5" height="5" rx="1" fill="#e9a841" opacity=".5"/>
-    <rect x="976" y="142" width="6" height="6" rx="1" fill="#e9a841" opacity=".55"/>
-    <rect x="986" y="142" width="6" height="6" rx="1" fill="#e9a841" opacity=".35"/>
-    <rect x="976" y="155" width="6" height="6" rx="1" fill="#e9a841" opacity=".45"/>
-    <rect x="1064" y="132" width="5" height="5" rx="1" fill="#e9a841" opacity=".5"/>
-    <rect x="1073" y="132" width="5" height="5" rx="1" fill="#e9a841" opacity=".35"/>
-
-    <!-- Ground line -->
-    <rect x="780" y="400" width="420" height="80" fill="#1a2e24" opacity=".5"/>
-    <line x1="760" y1="400" x2="1200" y2="400" stroke="#49785d" stroke-width="1" opacity=".4"/>
-
-    <!-- Vertical gold accent line (left of illustration area) -->
-    <rect x="760" y="60" width="2" height="360" rx="1" fill="url(#gold1)" opacity=".6"/>
-
-    <!-- LEFT: Content Area -->
-    <!-- Logo mark — diamond / leaf icon -->
-    <g transform="translate(72, 56)">
-      <!-- DH monogram leaf-diamond -->
-      <polygon points="32,0 64,20 64,52 32,72 0,52 0,20" fill="none" stroke="url(#gold1)" stroke-width="1.5" opacity=".9"/>
-      <polygon points="32,8 56,23 56,49 32,64 8,49 8,23" fill="url(#panel1)" opacity=".8"/>
-      <!-- D shape -->
-      <text x="32" y="46" font-family="Georgia,serif" font-size="26" font-weight="700"
-            fill="url(#gold1)" text-anchor="middle" letter-spacing="1">DH</text>
+    <!-- "POTEMA CERTIFIED" badge top right -->
+    <g transform="translate(608, 26)">
+      <rect width="140" height="50" rx="8" fill="none" stroke="url(#p-gold)" stroke-width="1.2"/>
+      <text x="70" y="21" font-size="8"  fill="#e9a841" text-anchor="middle" letter-spacing="2">POWERED BY</text>
+      <text x="70" y="38" font-size="13" fill="#f5c96a" text-anchor="middle" font-weight="700" letter-spacing="1">Potema® Germany</text>
     </g>
 
-    <!-- Brand name -->
-    <text x="152" y="82" font-family="Georgia,serif" font-size="14" font-weight="400"
-          fill="#e9a841" letter-spacing="6" opacity=".9">DH THAILAND</text>
+    <!-- Divider -->
+    <rect x="56" y="98" width="688" height="1" fill="#49785d" opacity=".35"/>
 
-    <!-- Gold rule -->
-    <rect x="72" y="152" width="48" height="2" rx="1" fill="url(#gold1)"/>
-
-    <!-- Main headline -->
-    <text x="72" y="208" font-family="Georgia,serif" font-size="48" font-weight="700"
-          fill="#ffffff" letter-spacing=".5">ลงทุนอย่างมั่นคง</text>
-    <text x="72" y="264" font-family="Georgia,serif" font-size="48" font-weight="700"
-          fill="url(#gold1)" letter-spacing=".5">เติบโตอย่างยั่งยืน</text>
-
-    <!-- Subtitle -->
-    <text x="72" y="308" font-family="'Segoe UI',Arial,sans-serif" font-size="16"
-          fill="#a8c4b4" letter-spacing="1">Trusted Investment &amp; Wealth Management Solutions</text>
-
-    <!-- Description line -->
-    <text x="72" y="338" font-family="'Segoe UI',Arial,sans-serif" font-size="13"
-          fill="#6fa085" letter-spacing=".3">บริหารความมั่งคั่งด้วยความเชี่ยวชาญ · Thailand's Premier Wealth Partner</text>
-
-    <!-- CTA Button -->
-    <g transform="translate(72, 368)">
-      <rect width="188" height="44" rx="22" fill="url(#gold1)"/>
-      <text x="94" y="28" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700"
-            fill="#1a2e24" text-anchor="middle" letter-spacing="2">เริ่มต้นวันนี้</text>
-    </g>
-    <g transform="translate(276, 368)">
-      <rect width="188" height="44" rx="22" fill="none" stroke="#e9a841" stroke-width="1.5"/>
-      <text x="94" y="28" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="700"
-            fill="#e9a841" text-anchor="middle" letter-spacing="2">ดูบริการทั้งหมด</text>
+    <!-- EVENT LABEL -->
+    <g transform="translate(56, 114)">
+      <rect width="170" height="28" rx="14" fill="url(#p-gold)"/>
+      <text x="85" y="19" font-size="11" fill="#1c3326" text-anchor="middle" font-weight="700" letter-spacing="2">บริการยอดนิยม</text>
     </g>
 
-    <!-- Bottom tagline strip -->
-    <rect x="0" y="448" width="1200" height="32" fill="#1a2e24" opacity=".7"/>
-    <text x="72" y="469" font-family="'Segoe UI',Arial,sans-serif" font-size="11"
-          fill="#6fa085" letter-spacing="4">INVESTMENT · PROPERTY · FINANCIAL ADVISORY · WEALTH PLANNING</text>
-    <text x="1128" y="469" font-family="'Segoe UI',Arial,sans-serif" font-size="11"
-          fill="#e9a841" letter-spacing="2" text-anchor="end">dh-thailand.com</text>
+    <!-- HEADLINE -->
+    <text x="56" y="198" font-size="52" font-weight="800" fill="#fff">ทำความสะอาด</text>
+    <text x="56" y="258" font-size="52" font-weight="800" fill="url(#p-gold)">ทุกจุดในบ้าน</text>
+    <text x="56" y="316" font-size="24" font-weight="400" fill="#a8c4b4" letter-spacing=".5">ด้วยเทคโนโลยีแห้ง ไม่มีสารตกค้าง</text>
+
+    <rect x="56" y="334" width="70" height="2" rx="1" fill="url(#p-gold)"/>
+
+    <!-- 6 SERVICE CARDS (3×2 grid) -->
+    <!-- Row 1 -->
+
+    <!-- Card: ที่นอน -->
+    <g transform="translate(56, 354)">
+      <rect width="214" height="148" rx="14" fill="url(#p-card)" filter="url(#p-shadow)"/>
+      <rect width="214" height="4"   rx="2" fill="url(#p-gold)" opacity=".9"/>
+      <!-- Mattress icon -->
+      <rect x="32" y="26" width="150" height="52" rx="6" fill="#1c3326" opacity=".5"/>
+      <rect x="32" y="24" width="150" height="14" rx="4" fill="#49785d" opacity=".6"/>
+      <rect x="32" y="36" width="150" height="8"  rx="0" fill="#1c3326" opacity=".3"/>
+      <!-- Stitching lines -->
+      <line x1="82"  y1="26" x2="82"  y2="78" stroke="#e9a841" stroke-width=".8" opacity=".4" stroke-dasharray="3 4"/>
+      <line x1="132" y1="26" x2="132" y2="78" stroke="#e9a841" stroke-width=".8" opacity=".4" stroke-dasharray="3 4"/>
+      <!-- Pillow on mattress -->
+      <rect x="48" y="30" width="42" height="22" rx="4" fill="#3b6550" opacity=".8"/>
+      <!-- Sparkle -->
+      <polygon points="186,30 188,24 190,30 196,32 190,34 188,40 186,34 180,32" fill="#e9a841" opacity=".7" transform="scale(.7) translate(90,12)"/>
+
+      <text x="20" y="108" font-size="16" fill="#fff" font-weight="700">ทำความสะอาดที่นอน</text>
+      <text x="20" y="126" font-size="11" fill="#a8c4b4" letter-spacing=".5">Mattress Sanitizing</text>
+      <text x="20" y="142" font-size="10" fill="#6fa085">ดูดไรฝุ่น · ฆ่าเชื้อโรค</text>
+    </g>
+
+    <!-- Card: โซฟา -->
+    <g transform="translate(292, 354)">
+      <rect width="214" height="148" rx="14" fill="url(#p-card)" filter="url(#p-shadow)"/>
+      <rect width="214" height="4"   rx="2" fill="url(#p-gold)" opacity=".9"/>
+      <!-- Sofa icon -->
+      <rect x="30" y="50" width="154" height="32" rx="8" fill="#1c3326" opacity=".5"/>
+      <rect x="40" y="28" width="60"  height="30" rx="6" fill="#1c3326" opacity=".55"/>
+      <rect x="114" y="28" width="60" height="30" rx="6" fill="#1c3326" opacity=".55"/>
+      <rect x="26" y="34" width="16" height="46" rx="6" fill="#1c3326" opacity=".5"/>
+      <rect x="172" y="34" width="16" height="46" rx="6" fill="#1c3326" opacity=".5"/>
+      <!-- Legs -->
+      <rect x="48"  y="82" width="8" height="14" rx="3" fill="#1c3326" opacity=".5"/>
+      <rect x="158" y="82" width="8" height="14" rx="3" fill="#1c3326" opacity=".5"/>
+
+      <text x="20" y="108" font-size="16" fill="#fff" font-weight="700">ทำความสะอาดโซฟา</text>
+      <text x="20" y="126" font-size="11" fill="#a8c4b4" letter-spacing=".5">Upholstery Sanitizing</text>
+      <text x="20" y="142" font-size="10" fill="#6fa085">ผ้า · หนัง · เบาะนั่ง</text>
+    </g>
+
+    <!-- Card: พรม -->
+    <g transform="translate(528, 354)">
+      <rect width="216" height="148" rx="14" fill="url(#p-card)" filter="url(#p-shadow)"/>
+      <rect width="216" height="4"   rx="2" fill="url(#p-gold)" opacity=".9"/>
+      <!-- Carpet icon — rolled carpet + fringe -->
+      <rect x="32" y="38" width="152" height="44" rx="4" fill="#1c3326" opacity=".5"/>
+      <!-- Pattern lines on carpet -->
+      <line x1="32" y1="52" x2="184" y2="52" stroke="#e9a841" stroke-width=".7" opacity=".3"/>
+      <line x1="32" y1="62" x2="184" y2="62" stroke="#e9a841" stroke-width=".7" opacity=".3"/>
+      <line x1="32" y1="72" x2="184" y2="72" stroke="#e9a841" stroke-width=".7" opacity=".3"/>
+      <!-- Fringe left -->
+      <line x1="32" y1="38" x2="26" y2="82" stroke="#6fa085" stroke-width="1.2" opacity=".5"/>
+      <line x1="32" y1="38" x2="29" y2="83" stroke="#6fa085" stroke-width="1.2" opacity=".4"/>
+      <!-- Fringe right -->
+      <line x1="184" y1="38" x2="190" y2="82" stroke="#6fa085" stroke-width="1.2" opacity=".5"/>
+      <line x1="184" y1="38" x2="187" y2="83" stroke="#6fa085" stroke-width="1.2" opacity=".4"/>
+
+      <text x="20" y="108" font-size="16" fill="#fff" font-weight="700">ทำความสะอาดพรม</text>
+      <text x="20" y="126" font-size="11" fill="#a8c4b4" letter-spacing=".5">Carpet Sanitizing</text>
+      <text x="20" y="142" font-size="10" fill="#6fa085">ระบบแห้ง ไม่ต้องรอแห้ง</text>
+    </g>
+
+    <!-- Row 2 -->
+
+    <!-- Card: ผ้าม่าน -->
+    <g transform="translate(56, 522)">
+      <rect width="214" height="148" rx="14" fill="url(#p-card)" filter="url(#p-shadow)"/>
+      <rect width="214" height="4"   rx="2" fill="url(#p-gold)" opacity=".9"/>
+      <!-- Curtain icon — two panels hanging from a rod -->
+      <line x1="32" y1="28" x2="182" y2="28" stroke="#e9a841" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- Rod rings -->
+      <circle cx="52"  cy="28" r="4" fill="none" stroke="#e9a841" stroke-width="1.5"/>
+      <circle cx="72"  cy="28" r="4" fill="none" stroke="#e9a841" stroke-width="1.5"/>
+      <circle cx="108" cy="28" r="4" fill="none" stroke="#e9a841" stroke-width="1.5"/>
+      <circle cx="142" cy="28" r="4" fill="none" stroke="#e9a841" stroke-width="1.5"/>
+      <circle cx="162" cy="28" r="4" fill="none" stroke="#e9a841" stroke-width="1.5"/>
+      <!-- Left panel -->
+      <path d="M32,28 Q28,50 34,80 Q38,90 42,80 Q48,50 44,28 Z" fill="#2d5042" opacity=".7"/>
+      <path d="M44,28 Q42,50 46,80 Q50,90 56,80 Q60,50 58,28 Z" fill="#2d5042" opacity=".65"/>
+      <path d="M58,28 Q54,50 60,80 Q64,90 70,80 Q74,50 72,28 Z" fill="#2d5042" opacity=".7"/>
+      <!-- Right panel -->
+      <path d="M130,28 Q126,50 132,80 Q136,90 140,80 Q144,50 142,28 Z" fill="#2d5042" opacity=".65"/>
+      <path d="M144,28 Q140,50 146,80 Q150,90 156,80 Q160,50 158,28 Z" fill="#2d5042" opacity=".7"/>
+      <path d="M158,28 Q154,50 160,80 Q164,90 170,80 Q174,50 172,28 Z" fill="#2d5042" opacity=".65"/>
+
+      <text x="20" y="108" font-size="16" fill="#fff" font-weight="700">ทำความสะอาดผ้าม่าน</text>
+      <text x="20" y="126" font-size="11" fill="#a8c4b4" letter-spacing=".5">Curtain Sanitizing</text>
+      <text x="20" y="142" font-size="10" fill="#6fa085">ไม่ต้องถอด · สะดวก</text>
+    </g>
+
+    <!-- Card: รถยนต์ -->
+    <g transform="translate(292, 522)">
+      <rect width="214" height="148" rx="14" fill="url(#p-card)" filter="url(#p-shadow)"/>
+      <rect width="214" height="4"   rx="2" fill="url(#p-gold)" opacity=".9"/>
+      <!-- Car icon (side view) -->
+      <rect x="30" y="60" width="154" height="32" rx="6" fill="#1c3326" opacity=".55"/>
+      <!-- Roof -->
+      <path d="M58,60 Q68,30 130,30 Q152,30 168,60 Z" fill="#1c3326" opacity=".5"/>
+      <!-- Windshield -->
+      <path d="M72,60 Q80,38 120,38 Q140,38 148,60 Z" fill="#2d5042" opacity=".5"/>
+      <!-- Windows -->
+      <path d="M72,60 Q74,42 98,42 Q100,42 100,60 Z" fill="#49785d" opacity=".35"/>
+      <!-- Wheels -->
+      <circle cx="68"  cy="92" r="14" fill="#1c3326" opacity=".6"/>
+      <circle cx="68"  cy="92" r="8"  fill="#2d5042" opacity=".4"/>
+      <circle cx="148" cy="92" r="14" fill="#1c3326" opacity=".6"/>
+      <circle cx="148" cy="92" r="8"  fill="#2d5042" opacity=".4"/>
+
+      <text x="20" y="116" font-size="16" fill="#fff" font-weight="700">ล้างและดูแลรถยนต์</text>
+      <text x="20" y="134" font-size="11" fill="#a8c4b4" letter-spacing=".5">Car Care & Delivery</text>
+      <text x="20" y="148" font-size="10" fill="#6fa085">บริการถึงบ้าน</text>
+    </g>
+
+    <!-- Card: Drone Glass -->
+    <g transform="translate(528, 522)">
+      <rect width="216" height="148" rx="14" fill="url(#p-card)" filter="url(#p-shadow)"/>
+      <rect width="216" height="4"   rx="2" fill="url(#p-gold)" opacity=".9"/>
+      <!-- Drone icon -->
+      <!-- Body -->
+      <rect x="84" y="42" width="48" height="24" rx="8" fill="#1c3326" opacity=".6"/>
+      <!-- Arms -->
+      <line x1="84" y1="52" x2="52"  y2="42" stroke="#2d5042" stroke-width="3" stroke-linecap="round" opacity=".7"/>
+      <line x1="132" y1="52" x2="164" y2="42" stroke="#2d5042" stroke-width="3" stroke-linecap="round" opacity=".7"/>
+      <line x1="84" y1="58" x2="52"  y2="68" stroke="#2d5042" stroke-width="3" stroke-linecap="round" opacity=".7"/>
+      <line x1="132" y1="58" x2="164" y2="68" stroke="#2d5042" stroke-width="3" stroke-linecap="round" opacity=".7"/>
+      <!-- Propellers -->
+      <ellipse cx="52"  cy="42" rx="18" ry="5" fill="#49785d" opacity=".5"/>
+      <ellipse cx="164" cy="42" rx="18" ry="5" fill="#49785d" opacity=".5"/>
+      <ellipse cx="52"  cy="68" rx="18" ry="5" fill="#49785d" opacity=".5"/>
+      <ellipse cx="164" cy="68" rx="18" ry="5" fill="#49785d" opacity=".5"/>
+      <!-- Spray line -->
+      <path d="M108,66 Q108,80 90,90 Q80,96 72,90" fill="none" stroke="#a8c4b4" stroke-width="1.2" stroke-dasharray="3 3" opacity=".6"/>
+      <!-- Spray dots -->
+      <circle cx="70" cy="92" r="2" fill="#a8c4b4" opacity=".5"/>
+      <circle cx="75" cy="88" r="1.5" fill="#a8c4b4" opacity=".4"/>
+
+      <text x="20" y="112" font-size="16" fill="#fff" font-weight="700">โดรนล้างกระจกอาคาร</text>
+      <text x="20" y="130" font-size="11" fill="#a8c4b4" letter-spacing=".5">Smart Drone Glass Cleaning</text>
+      <text x="20" y="146" font-size="10" fill="#6fa085">นวัตกรรมล่าสุด · อาคารสูง</text>
+    </g>
+
+    <!-- STATS STRIP -->
+    <rect x="0" y="694" width="800" height="100" fill="#1c3326" opacity=".85"/>
+    <rect x="0" y="694" width="800" height="1.5" fill="url(#p-gold)" opacity=".6"/>
+    <rect x="0" y="793" width="800" height="1.5" fill="url(#p-gold)" opacity=".6"/>
+
+    <text x="100" y="736" font-size="38" font-weight="800" fill="url(#p-gold)" text-anchor="middle">15+</text>
+    <text x="100" y="756" font-size="11" fill="#a8c4b4" text-anchor="middle" letter-spacing="1">ปีประสบการณ์</text>
+    <text x="100" y="770" font-size="9"  fill="#6fa085" text-anchor="middle" letter-spacing="2">YEARS</text>
+
+    <line x1="200" y1="710" x2="200" y2="778" stroke="#49785d" stroke-width="1" opacity=".45"/>
+
+    <text x="400" y="736" font-size="38" font-weight="800" fill="url(#p-gold)" text-anchor="middle">100,000+</text>
+    <text x="400" y="756" font-size="11" fill="#a8c4b4" text-anchor="middle" letter-spacing="1">ครัวเรือนที่ไว้วางใจ</text>
+    <text x="400" y="770" font-size="9"  fill="#6fa085" text-anchor="middle" letter-spacing="2">HOUSEHOLDS SERVED</text>
+
+    <line x1="600" y1="710" x2="600" y2="778" stroke="#49785d" stroke-width="1" opacity=".45"/>
+
+    <text x="700" y="736" font-size="38" font-weight="800" fill="url(#p-gold)" text-anchor="middle">ECARF</text>
+    <text x="700" y="756" font-size="11" fill="#a8c4b4" text-anchor="middle" letter-spacing="1">รับรองมาตรฐานยุโรป</text>
+    <text x="700" y="770" font-size="9"  fill="#6fa085" text-anchor="middle" letter-spacing="2">CERTIFIED</text>
+
+    <!-- QUOTE -->
+    <text x="400" y="840" font-size="17" font-style="italic" fill="#a8c4b4" text-anchor="middle">
+      "สะอาด ปลอดภัย ไร้สารเคมี — เพื่อสุขอนามัยของคนที่คุณรัก"
+    </text>
+    <rect x="310" y="850" width="180" height="1.5" rx="1" fill="url(#p-gold)" opacity=".5"/>
+
+    <!-- CTA -->
+    <g transform="translate(280, 868)">
+      <rect width="240" height="52" rx="26" fill="url(#p-gold)" filter="url(#p-shadow)"/>
+      <text x="120" y="32" font-size="15" fill="#1c3326" text-anchor="middle" font-weight="700" letter-spacing="1">โทรนัดหมายฟรี</text>
+    </g>
+
+    <!-- Contact line -->
+    <text x="400" y="948" font-size="12" fill="#6fa085" text-anchor="middle" letter-spacing="2">@dhthailand · dh-thailand.com · LINE: @dehygienique</text>
+
+    <!-- Footer -->
+    <rect x="0" y="966" width="800" height="34" fill="#1c3326" opacity=".9"/>
+    <rect x="0" y="966" width="800" height="2" fill="url(#p-gold)" opacity=".7"/>
+    <text x="400" y="989" font-size="9" fill="#6fa085" text-anchor="middle" letter-spacing="4">DE HYGIENIQUE (THAILAND) CO.,LTD. · TOTAL INDOOR HYGIENE SOLUTION</text>
   </g>
 </svg>
-    </div>
   </div>
+</div>
 
-  <!-- ═══════════════════════════════════════════════
-       PIECE 2 : PROMOTIONAL POSTER
-  ════════════════════════════════════════════════ -->
-  <p class="section-label">Design Asset 02</p>
-  <h2 class="section-title">Promotional Poster — Social Media / Print &nbsp;·&nbsp; 800 × 1000 px</h2>
-
-  <div class="design-card">
-    <div class="design-card-header">
-      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
-      <span class="label">poster-promo.svg</span>
-      <span class="size">800 × 1000 px</span>
-    </div>
-    <div class="design-canvas">
-<svg width="800" height="1000" viewBox="0 0 800 1000" xmlns="http://www.w3.org/2000/svg" style="border-radius:8px;">
+<!-- ══════════════════════════════════════════════
+     ASSET 03 — INFOGRAPHIC 1000×680
+════════════════════════════════════════════════ -->
+<p class="section-label">Design Asset 03</p>
+<h2 class="section-title">Infographic — กระบวนการทำงาน &amp; ข้อได้เปรียบ · 1000 × 680 px</h2>
+<div class="design-card">
+  <div class="design-card-header">
+    <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+    <span class="card-label">infographic-process.svg</span><span class="card-size">1000 × 680 px</span>
+  </div>
+  <div class="design-canvas">
+<svg width="1000" height="680" viewBox="0 0 1000 680" xmlns="http://www.w3.org/2000/svg" style="font-family:'DB Airy','Sarabun','Noto Sans Thai',sans-serif;">
   <defs>
-    <linearGradient id="pbg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1a2e24"/>
-      <stop offset="100%" stop-color="#2d5042"/>
+    <linearGradient id="i-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f4f8f5"/>
+      <stop offset="100%" stop-color="#eaf0ec"/>
     </linearGradient>
-    <linearGradient id="pgold" x1="0%" y1="0%" x2="100%" y2="0%">
+    <linearGradient id="i-gold" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#c8891e"/>
       <stop offset="50%" stop-color="#f5c96a"/>
       <stop offset="100%" stop-color="#c8891e"/>
     </linearGradient>
-    <linearGradient id="pmid" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#49785d" stop-opacity=".9"/>
-      <stop offset="100%" stop-color="#2d5042" stop-opacity=".9"/>
+    <linearGradient id="i-header" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1c3326"/>
+      <stop offset="100%" stop-color="#3b6550"/>
     </linearGradient>
-    <linearGradient id="pcard" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#3b6650"/>
-      <stop offset="100%" stop-color="#2a4d3c"/>
-    </linearGradient>
-    <radialGradient id="pglow" cx="50%" cy="30%" r="50%">
-      <stop offset="0%" stop-color="#e9a841" stop-opacity=".15"/>
-      <stop offset="100%" stop-color="#e9a841" stop-opacity="0"/>
-    </radialGradient>
-    <filter id="pshadow">
-      <feDropShadow dx="0" dy="4" stdDeviation="12" flood-color="#000" flood-opacity=".3"/>
-    </filter>
-    <filter id="pblur"><feGaussianBlur stdDeviation="20"/></filter>
-    <clipPath id="pclip"><rect width="800" height="1000" rx="8"/></clipPath>
-  </defs>
-
-  <g clip-path="url(#pclip)">
-    <!-- BG -->
-    <rect width="800" height="1000" fill="url(#pbg)"/>
-    <rect width="800" height="1000" fill="url(#pglow)"/>
-
-    <!-- Decorative circles -->
-    <circle cx="680" cy="120" r="220" fill="none" stroke="#e9a841" stroke-width="1" opacity=".2"/>
-    <circle cx="680" cy="120" r="160" fill="none" stroke="#e9a841" stroke-width=".5" opacity=".15"/>
-    <circle cx="120" cy="880" r="180" fill="none" stroke="#49785d" stroke-width="1" opacity=".3"/>
-    <circle cx="120" cy="880" r="120" fill="none" stroke="#49785d" stroke-width=".5" opacity=".2"/>
-
-    <!-- Blurred glow accent -->
-    <circle cx="680" cy="100" r="180" fill="#e9a841" opacity=".06" filter="url(#pblur)"/>
-
-    <!-- TOP SECTION ─────────────── -->
-    <!-- Gold top accent bar -->
-    <rect x="0" y="0" width="800" height="4" fill="url(#pgold)"/>
-
-    <!-- Logo area -->
-    <g transform="translate(60, 48)">
-      <polygon points="28,0 56,16 56,46 28,62 0,46 0,16"
-               fill="none" stroke="url(#pgold)" stroke-width="1.5" opacity=".9"/>
-      <text x="28" y="40" font-family="Georgia,serif" font-size="22" font-weight="700"
-            fill="url(#pgold)" text-anchor="middle">DH</text>
-    </g>
-    <text x="126" y="72" font-family="Georgia,serif" font-size="12" font-weight="400"
-          fill="#e9a841" letter-spacing="5" opacity=".85">DH THAILAND</text>
-    <text x="126" y="90" font-family="'Segoe UI',Arial,sans-serif" font-size="9"
-          fill="#6fa085" letter-spacing="3">WEALTH · INVESTMENT · TRUST</text>
-
-    <!-- Top-right badge -->
-    <g transform="translate(660, 44)">
-      <rect x="0" y="0" width="100" height="30" rx="15"
-            fill="none" stroke="url(#pgold)" stroke-width="1.2"/>
-      <text x="50" y="20" font-family="'Segoe UI',Arial,sans-serif" font-size="10"
-            fill="#e9a841" text-anchor="middle" letter-spacing="2" font-weight="600">PREMIUM</text>
-    </g>
-
-    <!-- Divider line -->
-    <rect x="60" y="124" width="680" height="1" fill="#49785d" opacity=".4"/>
-
-    <!-- HERO TEXT ─────────────── -->
-    <!-- Large decorative "DH" watermark -->
-    <text x="400" y="300" font-family="Georgia,serif" font-size="300" font-weight="700"
-          fill="#49785d" opacity=".08" text-anchor="middle">DH</text>
-
-    <!-- Event / offer label -->
-    <g transform="translate(60, 148)">
-      <rect width="160" height="28" rx="14" fill="url(#pgold)" opacity=".95"/>
-      <text x="80" y="19" font-family="'Segoe UI',Arial,sans-serif" font-size="11"
-            fill="#1a2e24" text-anchor="middle" font-weight="700" letter-spacing="2">EXCLUSIVE OFFER</text>
-    </g>
-
-    <!-- Main headline -->
-    <text x="60" y="230" font-family="Georgia,serif" font-size="52" font-weight="700"
-          fill="#ffffff" letter-spacing="-.5">บริหารความ</text>
-    <text x="60" y="294" font-family="Georgia,serif" font-size="52" font-weight="700"
-          fill="#ffffff" letter-spacing="-.5">มั่งคั่งของคุณ</text>
-    <text x="60" y="358" font-family="Georgia,serif" font-size="52" font-weight="700"
-          fill="url(#pgold)">อย่างชาญฉลาด</text>
-
-    <!-- Subheadline -->
-    <text x="60" y="404" font-family="'Segoe UI',Arial,sans-serif" font-size="15"
-          fill="#a8c4b4" letter-spacing=".5">Smart Wealth Management by DH Thailand</text>
-
-    <!-- Gold rule -->
-    <rect x="60" y="426" width="80" height="2" rx="1" fill="url(#pgold)"/>
-
-    <!-- FEATURE CARDS ─────────────── -->
-    <!-- Card 1 -->
-    <g transform="translate(60, 448)">
-      <rect width="210" height="130" rx="12" fill="url(#pcard)" filter="url(#pshadow)"/>
-      <rect width="210" height="3" rx="1.5" fill="url(#pgold)" opacity=".8"/>
-      <!-- Icon: chart line -->
-      <polyline points="20,80 50,55 80,65 110,35 140,45 170,22"
-                fill="none" stroke="#e9a841" stroke-width="2" stroke-linejoin="round"/>
-      <circle cx="170" cy="22" r="4" fill="#e9a841"/>
-      <text x="20" y="108" font-family="'Segoe UI',Arial,sans-serif" font-size="13"
-            fill="#fff" font-weight="700">การลงทุน</text>
-      <text x="20" y="124" font-family="'Segoe UI',Arial,sans-serif" font-size="10"
-            fill="#6fa085" letter-spacing="1">INVESTMENT</text>
-    </g>
-
-    <!-- Card 2 -->
-    <g transform="translate(292, 448)">
-      <rect width="210" height="130" rx="12" fill="url(#pcard)" filter="url(#pshadow)"/>
-      <rect width="210" height="3" rx="1.5" fill="url(#pgold)" opacity=".8"/>
-      <!-- Icon: building -->
-      <rect x="60" y="28" width="18" height="52" rx="2" fill="#49785d" opacity=".7"/>
-      <rect x="84" y="18" width="24" height="62" rx="2" fill="#49785d" opacity=".9"/>
-      <rect x="114" y="28" width="18" height="52" rx="2" fill="#49785d" opacity=".7"/>
-      <rect x="84" y="18" width="24" height="6" rx="1" fill="#e9a841" opacity=".9"/>
-      <line x1="55" y1="80" x2="155" y2="80" stroke="#e9a841" stroke-width="1.5" opacity=".5"/>
-      <text x="20" y="108" font-family="'Segoe UI',Arial,sans-serif" font-size="13"
-            fill="#fff" font-weight="700">อสังหาริมทรัพย์</text>
-      <text x="20" y="124" font-family="'Segoe UI',Arial,sans-serif" font-size="10"
-            fill="#6fa085" letter-spacing="1">PROPERTY</text>
-    </g>
-
-    <!-- Card 3 -->
-    <g transform="translate(524, 448)">
-      <rect width="216" height="130" rx="12" fill="url(#pcard)" filter="url(#pshadow)"/>
-      <rect width="216" height="3" rx="1.5" fill="url(#pgold)" opacity=".8"/>
-      <!-- Icon: shield -->
-      <path d="M108,22 L136,34 L136,60 Q136,78 108,88 Q80,78 80,60 L80,34 Z"
-            fill="none" stroke="#e9a841" stroke-width="2"/>
-      <path d="M99,55 L106,63 L120,45" fill="none" stroke="#e9a841" stroke-width="2.5"
-            stroke-linecap="round" stroke-linejoin="round"/>
-      <text x="20" y="108" font-family="'Segoe UI',Arial,sans-serif" font-size="13"
-            fill="#fff" font-weight="700">ที่ปรึกษาการเงิน</text>
-      <text x="20" y="124" font-family="'Segoe UI',Arial,sans-serif" font-size="10"
-            fill="#6fa085" letter-spacing="1">ADVISORY</text>
-    </g>
-
-    <!-- STATS STRIP ─────────────── -->
-    <rect x="0" y="618" width="800" height="120" fill="url(#pmid)" opacity=".9"/>
-    <rect x="0" y="618" width="800" height="1" fill="url(#pgold)" opacity=".5"/>
-    <rect x="0" y="738" width="800" height="1" fill="url(#pgold)" opacity=".5"/>
-
-    <!-- Stat 1 -->
-    <text x="120" y="672" font-family="Georgia,serif" font-size="40" font-weight="700"
-          fill="url(#pgold)" text-anchor="middle">15+</text>
-    <text x="120" y="698" font-family="'Segoe UI',Arial,sans-serif" font-size="11"
-          fill="#a8c4b4" text-anchor="middle" letter-spacing="2">ปีแห่งประสบการณ์</text>
-    <text x="120" y="714" font-family="'Segoe UI',Arial,sans-serif" font-size="9"
-          fill="#6fa085" text-anchor="middle" letter-spacing="2">YEARS OF EXCELLENCE</text>
-
-    <line x1="240" y1="638" x2="240" y2="718" stroke="#49785d" stroke-width="1" opacity=".5"/>
-
-    <!-- Stat 2 -->
-    <text x="400" y="672" font-family="Georgia,serif" font-size="40" font-weight="700"
-          fill="url(#pgold)" text-anchor="middle">5,000+</text>
-    <text x="400" y="698" font-family="'Segoe UI',Arial,sans-serif" font-size="11"
-          fill="#a8c4b4" text-anchor="middle" letter-spacing="2">ลูกค้าที่ไว้วางใจ</text>
-    <text x="400" y="714" font-family="'Segoe UI',Arial,sans-serif" font-size="9"
-          fill="#6fa085" text-anchor="middle" letter-spacing="2">TRUSTED CLIENTS</text>
-
-    <line x1="560" y1="638" x2="560" y2="718" stroke="#49785d" stroke-width="1" opacity=".5"/>
-
-    <!-- Stat 3 -->
-    <text x="680" y="672" font-family="Georgia,serif" font-size="40" font-weight="700"
-          fill="url(#pgold)" text-anchor="middle">₿ 10B+</text>
-    <text x="680" y="698" font-family="'Segoe UI',Arial,sans-serif" font-size="11"
-          fill="#a8c4b4" text-anchor="middle" letter-spacing="2">สินทรัพย์ภายใต้การจัดการ</text>
-    <text x="680" y="714" font-family="'Segoe UI',Arial,sans-serif" font-size="9"
-          fill="#6fa085" text-anchor="middle" letter-spacing="2">ASSETS UNDER MANAGEMENT</text>
-
-    <!-- BOTTOM CTA SECTION ─────────────── -->
-    <!-- Testimonial quote -->
-    <text x="400" y="790" font-family="Georgia,serif" font-size="17" font-style="italic"
-          fill="#a8c4b4" text-anchor="middle" opacity=".85">
-      "ความมั่งคั่งที่แท้จริง เริ่มต้นจากการวางแผนที่ถูกต้อง"
-    </text>
-    <text x="400" y="816" font-family="'Segoe UI',Arial,sans-serif" font-size="11"
-          fill="#6fa085" text-anchor="middle" letter-spacing="3">— DH THAILAND PHILOSOPHY</text>
-
-    <!-- CTA Button -->
-    <g transform="translate(280, 844)">
-      <rect width="240" height="52" rx="26" fill="url(#pgold)" filter="url(#pshadow)"/>
-      <text x="120" y="32" font-family="'Segoe UI',Arial,sans-serif" font-size="14"
-            fill="#1a2e24" text-anchor="middle" font-weight="700" letter-spacing="2">ปรึกษาฟรี วันนี้</text>
-    </g>
-
-    <!-- Social row -->
-    <text x="400" y="928" font-family="'Segoe UI',Arial,sans-serif" font-size="11"
-          fill="#6fa085" text-anchor="middle" letter-spacing="3">@dhthailand &nbsp;·&nbsp; dh-thailand.com</text>
-
-    <!-- Bottom gold bar -->
-    <rect x="0" y="960" width="800" height="40" fill="#1a2e24" opacity=".8"/>
-    <rect x="0" y="960" width="800" height="2" fill="url(#pgold)" opacity=".7"/>
-    <text x="400" y="986" font-family="'Segoe UI',Arial,sans-serif" font-size="9"
-          fill="#6fa085" text-anchor="middle" letter-spacing="5">
-      INVESTMENT · PROPERTY · FINANCIAL ADVISORY · WEALTH PLANNING · THAILAND
-    </text>
-  </g>
-</svg>
-    </div>
-  </div>
-
-  <!-- ═══════════════════════════════════════════════
-       PIECE 3 : INFOGRAPHIC
-  ════════════════════════════════════════════════ -->
-  <p class="section-label">Design Asset 03</p>
-  <h2 class="section-title">Infographic — บริการ &amp; กระบวนการทำงาน &nbsp;·&nbsp; 900 × 640 px</h2>
-
-  <div class="design-card">
-    <div class="design-card-header">
-      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
-      <span class="label">infographic-services.svg</span>
-      <span class="size">900 × 640 px</span>
-    </div>
-    <div class="design-canvas">
-<svg width="900" height="640" viewBox="0 0 900 640" xmlns="http://www.w3.org/2000/svg" style="border-radius:8px;">
-  <defs>
-    <linearGradient id="ibg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f9fdf9"/>
-      <stop offset="100%" stop-color="#edf4f0"/>
-    </linearGradient>
-    <linearGradient id="igold" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#c8891e"/>
-      <stop offset="50%" stop-color="#f5c96a"/>
-      <stop offset="100%" stop-color="#c8891e"/>
-    </linearGradient>
-    <linearGradient id="igreen" x1="0%" y1="0%" x2="0%" y2="100%">
+    <linearGradient id="i-step" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stop-color="#49785d"/>
       <stop offset="100%" stop-color="#2d5042"/>
     </linearGradient>
-    <linearGradient id="icard-a" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#49785d"/>
-      <stop offset="100%" stop-color="#3b6650"/>
-    </linearGradient>
-    <filter id="icard-shadow">
-      <feDropShadow dx="0" dy="3" stdDeviation="8" flood-color="#49785d" flood-opacity=".2"/>
+    <filter id="i-card-shadow">
+      <feDropShadow dx="0" dy="3" stdDeviation="7" flood-color="#49785d" flood-opacity=".18"/>
     </filter>
-    <filter id="ishadow-sm">
-      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000" flood-opacity=".08"/>
+    <filter id="i-sm-shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000" flood-opacity=".07"/>
     </filter>
-    <clipPath id="iclip"><rect width="900" height="640" rx="8"/></clipPath>
-  </defs>
-
-  <g clip-path="url(#iclip)">
-    <!-- BG -->
-    <rect width="900" height="640" fill="url(#ibg)"/>
-    <!-- Subtle dot grid -->
-    <pattern id="dots" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
-      <circle cx="15" cy="15" r="1" fill="#49785d" opacity=".12"/>
+    <clipPath id="i-clip"><rect width="1000" height="680" rx="6"/></clipPath>
+    <pattern id="i-dots" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="14" cy="14" r=".9" fill="#49785d" opacity=".1"/>
     </pattern>
-    <rect width="900" height="640" fill="url(#dots)"/>
+  </defs>
+  <g clip-path="url(#i-clip)">
+    <!-- BG -->
+    <rect width="1000" height="680" fill="url(#i-bg)"/>
+    <rect width="1000" height="680" fill="url(#i-dots)"/>
 
-    <!-- TOP HEADER ─────────────── -->
-    <rect x="0" y="0" width="900" height="88" fill="url(#igreen)"/>
-    <rect x="0" y="86" width="900" height="2" fill="url(#igold)" opacity=".8"/>
+    <!-- HEADER -->
+    <rect x="0" y="0" width="1000" height="82" fill="url(#i-header)"/>
+    <rect x="0" y="80" width="1000" height="2.5" fill="url(#i-gold)" opacity=".85"/>
 
     <!-- Logo in header -->
-    <g transform="translate(32, 22)">
-      <polygon points="22,0 44,13 44,37 22,50 0,37 0,13"
-               fill="none" stroke="url(#igold)" stroke-width="1.2"/>
-      <text x="22" y="33" font-family="Georgia,serif" font-size="17" font-weight="700"
-            fill="url(#igold)" text-anchor="middle">DH</text>
+    <g transform="translate(28, 16)">
+      <polygon points="24,0 48,14 48,40 24,54 0,40 0,14"
+               fill="none" stroke="url(#i-gold)" stroke-width="1.3"/>
+      <path d="M24,10 Q31,20 31,28 A7,7 0 0,1 17,28 Q17,20 24,10 Z" fill="url(#i-gold)" opacity=".9"/>
     </g>
 
-    <!-- Header text -->
-    <text x="450" y="38" font-family="Georgia,serif" font-size="22" font-weight="700"
-          fill="#ffffff" text-anchor="middle" letter-spacing="1">บริการครบวงจร เพื่อความมั่งคั่งที่ยั่งยืน</text>
-    <text x="450" y="64" font-family="'Segoe UI',Arial,sans-serif" font-size="12"
-          fill="#a8c4b4" text-anchor="middle" letter-spacing="3">COMPREHENSIVE WEALTH SOLUTIONS BY DH THAILAND</text>
+    <text x="500" y="36" font-size="22" font-weight="800" fill="#fff" text-anchor="middle" letter-spacing=".5">
+      เราทำความสะอาดอย่างไร? และทำไมต้อง De Hygienique
+    </text>
+    <text x="500" y="60" font-size="11" fill="#a8c4b4" text-anchor="middle" letter-spacing="3">
+      PROCESS &amp; ADVANTAGES — DE HYGIENIQUE THAILAND
+    </text>
 
-    <!-- ── PROCESS FLOW ── -->
-    <!-- Step line connector -->
-    <line x1="126" y1="220" x2="774" y2="220" stroke="#49785d" stroke-width="1.5"
-          stroke-dasharray="6 4" opacity=".4"/>
+    <!-- ── PROCESS FLOW (5 steps) ── -->
+    <!-- Connector dashed line -->
+    <line x1="102" y1="192" x2="898" y2="192" stroke="#49785d" stroke-width="1.5"
+          stroke-dasharray="5 5" opacity=".35"/>
 
-    <!-- Arrow connectors between steps -->
-    <!-- Arrow 1→2 -->
-    <polygon points="290,220 275,213 275,227" fill="#e9a841" opacity=".7"/>
-    <!-- Arrow 2→3 -->
-    <polygon points="478,220 463,213 463,227" fill="#e9a841" opacity=".7"/>
-    <!-- Arrow 3→4 -->
-    <polygon points="666,220 651,213 651,227" fill="#e9a841" opacity=".7"/>
+    <!-- Arrows -->
+    <polygon points="276,192 262,185 262,199" fill="#e9a841" opacity=".65"/>
+    <polygon points="466,192 452,185 452,199" fill="#e9a841" opacity=".65"/>
+    <polygon points="656,192 642,185 642,199" fill="#e9a841" opacity=".65"/>
+    <polygon points="846,192 832,185 832,199" fill="#e9a841" opacity=".65"/>
 
-    <!-- Step 1 -->
-    <g transform="translate(60, 138)">
-      <rect width="150" height="170" rx="16" fill="url(#icard-a)" filter="url(#icard-shadow)"/>
-      <rect width="150" height="4" rx="2" fill="url(#igold)" opacity=".9"/>
-      <!-- Number badge -->
-      <circle cx="75" cy="50" r="24" fill="#1a2e24" opacity=".5"/>
-      <text x="75" y="58" font-family="Georgia,serif" font-size="22" font-weight="700"
-            fill="url(#igold)" text-anchor="middle">01</text>
-      <!-- Step name -->
-      <text x="75" y="100" font-family="'Segoe UI',Arial,sans-serif" font-size="13"
-            fill="#ffffff" text-anchor="middle" font-weight="700">วิเคราะห์</text>
-      <text x="75" y="118" font-family="'Segoe UI',Arial,sans-serif" font-size="13"
-            fill="#ffffff" text-anchor="middle" font-weight="700">ความต้องการ</text>
-      <text x="75" y="140" font-family="'Segoe UI',Arial,sans-serif" font-size="10"
-            fill="#a8c4b4" text-anchor="middle" letter-spacing="1">NEEDS ANALYSIS</text>
-      <!-- Icon: magnifier -->
-      <circle cx="75" cy="158" r="6" fill="none" stroke="#e9a841" stroke-width="1.5"/>
-      <line x1="79" y1="163" x2="84" y2="168" stroke="#e9a841" stroke-width="1.5" stroke-linecap="round"/>
+    <!-- Step cards (shared macro) -->
+    <!-- Step 1: สำรวจพื้นที่ -->
+    <g transform="translate(30, 116)">
+      <rect width="154" height="164" rx="14" fill="url(#i-step)" filter="url(#i-card-shadow)"/>
+      <rect width="154" height="4" rx="2" fill="url(#i-gold)" opacity=".85"/>
+      <circle cx="77" cy="52" r="26" fill="#1c3326" opacity=".45"/>
+      <text x="77" y="59" font-size="22" font-weight="800" fill="url(#i-gold)" text-anchor="middle">01</text>
+      <text x="77" y="98"  font-size="14" fill="#fff" font-weight="700" text-anchor="middle">สำรวจพื้นที่</text>
+      <text x="77" y="114" font-size="10" fill="#a8c4b4" text-anchor="middle" letter-spacing=".5">ASSESSMENT</text>
+      <!-- icon: eye/inspect -->
+      <ellipse cx="77" cy="138" rx="12" ry="7" fill="none" stroke="#e9a841" stroke-width="1.5"/>
+      <circle cx="77" cy="138" r="4" fill="#e9a841" opacity=".8"/>
     </g>
 
-    <!-- Step 2 -->
-    <g transform="translate(248, 138)">
-      <rect width="150" height="170" rx="16" fill="url(#icard-a)" filter="url(#icard-shadow)"/>
-      <rect width="150" height="4" rx="2" fill="url(#igold)" opacity=".9"/>
-      <circle cx="75" cy="50" r="24" fill="#1a2e24" opacity=".5"/>
-      <text x="75" y="58" font-family="Georgia,serif" font-size="22" font-weight="700"
-            fill="url(#igold)" text-anchor="middle">02</text>
-      <text x="75" y="100" font-family="'Segoe UI',Arial,sans-serif" font-size="13"
-            fill="#ffffff" text-anchor="middle" font-weight="700">ออกแบบ</text>
-      <text x="75" y="118" font-family="'Segoe UI',Arial,sans-serif" font-size="13"
-            fill="#ffffff" text-anchor="middle" font-weight="700">แผนการลงทุน</text>
-      <text x="75" y="140" font-family="'Segoe UI',Arial,sans-serif" font-size="10"
-            fill="#a8c4b4" text-anchor="middle" letter-spacing="1">PORTFOLIO DESIGN</text>
-      <!-- Icon: pencil-ruler -->
-      <line x1="62" y1="168" x2="88" y2="148" stroke="#e9a841" stroke-width="2" stroke-linecap="round"/>
-      <rect x="58" y="164" width="10" height="10" rx="2"
-            fill="none" stroke="#e9a841" stroke-width="1.5" transform="rotate(-45,63,169)"/>
+    <!-- Step 2: วิเคราะห์ -->
+    <g transform="translate(222, 116)">
+      <rect width="154" height="164" rx="14" fill="url(#i-step)" filter="url(#i-card-shadow)"/>
+      <rect width="154" height="4" rx="2" fill="url(#i-gold)" opacity=".85"/>
+      <circle cx="77" cy="52" r="26" fill="#1c3326" opacity=".45"/>
+      <text x="77" y="59" font-size="22" font-weight="800" fill="url(#i-gold)" text-anchor="middle">02</text>
+      <text x="77" y="98"  font-size="14" fill="#fff" font-weight="700" text-anchor="middle">เลือกสูตรเฉพาะ</text>
+      <text x="77" y="114" font-size="10" fill="#a8c4b4" text-anchor="middle" letter-spacing=".5">CUSTOMIZED FORMULA</text>
+      <!-- icon: beaker/flask -->
+      <path d="M70,128 L67,150 Q77,158 87,150 L84,128 Z"
+            fill="none" stroke="#e9a841" stroke-width="1.5" stroke-linejoin="round"/>
+      <line x1="68" y1="134" x2="84" y2="134" stroke="#e9a841" stroke-width="1" opacity=".5"/>
+      <circle cx="74" cy="146" r="2" fill="#e9a841" opacity=".6"/>
     </g>
 
-    <!-- Step 3 -->
-    <g transform="translate(436, 138)">
-      <rect width="150" height="170" rx="16" fill="url(#icard-a)" filter="url(#icard-shadow)"/>
-      <rect width="150" height="4" rx="2" fill="url(#igold)" opacity=".9"/>
-      <circle cx="75" cy="50" r="24" fill="#1a2e24" opacity=".5"/>
-      <text x="75" y="58" font-family="Georgia,serif" font-size="22" font-weight="700"
-            fill="url(#igold)" text-anchor="middle">03</text>
-      <text x="75" y="100" font-family="'Segoe UI',Arial,sans-serif" font-size="13"
-            fill="#ffffff" text-anchor="middle" font-weight="700">ดำเนินการ</text>
-      <text x="75" y="118" font-family="'Segoe UI',Arial,sans-serif" font-size="13"
-            fill="#ffffff" text-anchor="middle" font-weight="700">ลงทุน</text>
-      <text x="75" y="140" font-family="'Segoe UI',Arial,sans-serif" font-size="10"
-            fill="#a8c4b4" text-anchor="middle" letter-spacing="1">EXECUTION</text>
-      <!-- Icon: rocket / upward arrow -->
-      <path d="M75,165 L75,149 M70,158 L75,149 L80,158"
-            fill="none" stroke="#e9a841" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Step 3: ทำความสะอาด -->
+    <g transform="translate(414, 116)">
+      <rect width="154" height="164" rx="14" fill="url(#i-step)" filter="url(#i-card-shadow)"/>
+      <rect width="154" height="4" rx="2" fill="url(#i-gold)" opacity=".85"/>
+      <circle cx="77" cy="52" r="26" fill="#1c3326" opacity=".45"/>
+      <text x="77" y="59" font-size="22" font-weight="800" fill="url(#i-gold)" text-anchor="middle">03</text>
+      <text x="77" y="98"  font-size="14" fill="#fff" font-weight="700" text-anchor="middle">ทำความสะอาด</text>
+      <text x="77" y="114" font-size="10" fill="#a8c4b4" text-anchor="middle" letter-spacing=".5">DRY SANITIZING</text>
+      <!-- icon: vacuum/device arrow -->
+      <rect x="58" y="128" width="30" height="18" rx="5" fill="none" stroke="#e9a841" stroke-width="1.5"/>
+      <line x1="88" y1="137" x2="100" y2="137" stroke="#e9a841" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="103" cy="137" r="3" fill="#e9a841" opacity=".7"/>
+      <!-- suction particles -->
+      <circle cx="50" cy="133" r="1.5" fill="#e9a841" opacity=".5"/>
+      <circle cx="46" cy="139" r="1"   fill="#e9a841" opacity=".4"/>
+      <circle cx="50" cy="145" r="1.5" fill="#e9a841" opacity=".5"/>
     </g>
 
-    <!-- Step 4 -->
-    <g transform="translate(624, 138)">
-      <rect width="152" height="170" rx="16" fill="url(#icard-a)" filter="url(#icard-shadow)"/>
-      <rect width="152" height="4" rx="2" fill="url(#igold)" opacity=".9"/>
-      <circle cx="76" cy="50" r="24" fill="#1a2e24" opacity=".5"/>
-      <text x="76" y="58" font-family="Georgia,serif" font-size="22" font-weight="700"
-            fill="url(#igold)" text-anchor="middle">04</text>
-      <text x="76" y="100" font-family="'Segoe UI',Arial,sans-serif" font-size="13"
-            fill="#ffffff" text-anchor="middle" font-weight="700">ติดตาม &amp; ปรับ</text>
-      <text x="76" y="118" font-family="'Segoe UI',Arial,sans-serif" font-size="13"
-            fill="#ffffff" text-anchor="middle" font-weight="700">พอร์ตโฟลิโอ</text>
-      <text x="76" y="140" font-family="'Segoe UI',Arial,sans-serif" font-size="10"
-            fill="#a8c4b4" text-anchor="middle" letter-spacing="1">MONITOR &amp; OPTIMIZE</text>
-      <!-- Icon: refresh circle -->
-      <path d="M76,158 m-10,0 a10,10 0 1,1 14,7"
-            fill="none" stroke="#e9a841" stroke-width="2" stroke-linecap="round"/>
-      <polygon points="90,165 84,168 86,162" fill="#e9a841"/>
-    </g>
-
-    <!-- ── BOTTOM SERVICE PILLS ── -->
-    <rect x="32" y="348" width="836" height="1" fill="#49785d" opacity=".2"/>
-
-    <text x="450" y="388" font-family="Georgia,serif" font-size="16" font-weight="700"
-          fill="#1a2e24" text-anchor="middle" letter-spacing=".5">บริการหลักของเรา</text>
-    <rect x="390" y="396" width="120" height="2" rx="1" fill="url(#igold)"/>
-
-    <!-- Service pill row 1 -->
-    <g transform="translate(56, 414)">
-      <rect width="170" height="52" rx="26" fill="#fff" stroke="#49785d" stroke-width="1.5"
-            filter="url(#ishadow-sm)"/>
-      <!-- icon: bar chart -->
-      <rect x="18" y="18" width="6" height="16" rx="2" fill="#49785d"/>
-      <rect x="27" y="13" width="6" height="21" rx="2" fill="#e9a841"/>
-      <rect x="36" y="22" width="6" height="12" rx="2" fill="#49785d" opacity=".6"/>
-      <text x="52" y="33" font-family="'Segoe UI',Arial,sans-serif" font-size="12"
-            fill="#1a2e24" font-weight="700">หุ้น &amp; กองทุน</text>
-      <text x="52" y="49" font-family="'Segoe UI',Arial,sans-serif" font-size="10"
-            fill="#6fa085">Stocks &amp; Funds</text>
-    </g>
-
-    <g transform="translate(244, 414)">
-      <rect width="170" height="52" rx="26" fill="#fff" stroke="#49785d" stroke-width="1.5"
-            filter="url(#ishadow-sm)"/>
-      <!-- icon: house -->
-      <polygon points="18,34 28,22 38,34" fill="#49785d" opacity=".8"/>
-      <rect x="21" y="34" width="14" height="12" rx="1" fill="#49785d"/>
-      <rect x="27" y="38" width="5" height="8" rx="1" fill="#e9a841"/>
-      <text x="50" y="33" font-family="'Segoe UI',Arial,sans-serif" font-size="12"
-            fill="#1a2e24" font-weight="700">อสังหาริมทรัพย์</text>
-      <text x="50" y="49" font-family="'Segoe UI',Arial,sans-serif" font-size="10"
-            fill="#6fa085">Real Estate</text>
-    </g>
-
-    <g transform="translate(432, 414)">
-      <rect width="170" height="52" rx="26" fill="#fff" stroke="#49785d" stroke-width="1.5"
-            filter="url(#ishadow-sm)"/>
-      <!-- icon: coin -->
-      <circle cx="28" cy="28" r="12" fill="none" stroke="#e9a841" stroke-width="2"/>
-      <text x="28" y="34" font-family="Georgia,serif" font-size="13" font-weight="700"
-            fill="#e9a841" text-anchor="middle">฿</text>
-      <text x="50" y="33" font-family="'Segoe UI',Arial,sans-serif" font-size="12"
-            fill="#1a2e24" font-weight="700">สินทรัพย์ดิจิทัล</text>
-      <text x="50" y="49" font-family="'Segoe UI',Arial,sans-serif" font-size="10"
-            fill="#6fa085">Digital Assets</text>
-    </g>
-
-    <g transform="translate(620, 414)">
-      <rect width="170" height="52" rx="26" fill="#fff" stroke="#49785d" stroke-width="1.5"
-            filter="url(#ishadow-sm)"/>
-      <!-- icon: shield check -->
-      <path d="M28,17 L38,21 L38,34 Q38,42 28,46 Q18,42 18,34 L18,21 Z"
-            fill="none" stroke="#49785d" stroke-width="1.8"/>
-      <path d="M22,31 L26,36 L34,25" fill="none" stroke="#e9a841" stroke-width="2"
+    <!-- Step 4: ฆ่าเชื้อโรค -->
+    <g transform="translate(606, 116)">
+      <rect width="154" height="164" rx="14" fill="url(#i-step)" filter="url(#i-card-shadow)"/>
+      <rect width="154" height="4" rx="2" fill="url(#i-gold)" opacity=".85"/>
+      <circle cx="77" cy="52" r="26" fill="#1c3326" opacity=".45"/>
+      <text x="77" y="59" font-size="22" font-weight="800" fill="url(#i-gold)" text-anchor="middle">04</text>
+      <text x="77" y="98"  font-size="14" fill="#fff" font-weight="700" text-anchor="middle">ฆ่าเชื้อโรค</text>
+      <text x="77" y="114" font-size="10" fill="#a8c4b4" text-anchor="middle" letter-spacing=".5">DISINFECTION</text>
+      <!-- icon: shield + check -->
+      <path d="M77,125 L92,132 L92,148 Q92,158 77,164 Q62,158 62,148 L62,132 Z"
+            fill="none" stroke="#e9a841" stroke-width="1.5"/>
+      <path d="M70,144 L75,150 L86,135" fill="none" stroke="#e9a841" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round"/>
-      <text x="50" y="33" font-family="'Segoe UI',Arial,sans-serif" font-size="12"
-            fill="#1a2e24" font-weight="700">ประกันภัย</text>
-      <text x="50" y="49" font-family="'Segoe UI',Arial,sans-serif" font-size="10"
-            fill="#6fa085">Insurance</text>
     </g>
 
-    <!-- Service pill row 2 -->
-    <g transform="translate(150, 488)">
-      <rect width="170" height="52" rx="26" fill="#fff" stroke="#49785d" stroke-width="1.5"
-            filter="url(#ishadow-sm)"/>
-      <!-- icon: growth -->
-      <polyline points="16,42 26,30 36,36 46,20"
-                fill="none" stroke="#e9a841" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="46" cy="20" r="3" fill="#e9a841"/>
-      <text x="58" y="33" font-family="'Segoe UI',Arial,sans-serif" font-size="12"
-            fill="#1a2e24" font-weight="700">วางแผนภาษี</text>
-      <text x="58" y="49" font-family="'Segoe UI',Arial,sans-serif" font-size="10"
-            fill="#6fa085">Tax Planning</text>
+    <!-- Step 5: รับประกัน -->
+    <g transform="translate(796, 116)">
+      <rect width="174" height="164" rx="14" fill="url(#i-step)" filter="url(#i-card-shadow)"/>
+      <rect width="174" height="4" rx="2" fill="url(#i-gold)" opacity=".85"/>
+      <circle cx="87" cy="52" r="26" fill="#1c3326" opacity=".45"/>
+      <text x="87" y="59" font-size="22" font-weight="800" fill="url(#i-gold)" text-anchor="middle">05</text>
+      <text x="87" y="98"  font-size="14" fill="#fff" font-weight="700" text-anchor="middle">รับประกันผล</text>
+      <text x="87" y="114" font-size="10" fill="#a8c4b4" text-anchor="middle" letter-spacing=".5">100% GUARANTEE</text>
+      <!-- icon: medal / badge star -->
+      <circle cx="87" cy="142" r="16" fill="none" stroke="#e9a841" stroke-width="1.5"/>
+      <polygon points="87,130 89.5,138 98,138 91.5,143 94,151 87,146 80,151 82.5,143 76,138 84.5,138"
+               fill="#e9a841" opacity=".85"/>
     </g>
 
-    <g transform="translate(338, 488)">
-      <rect width="170" height="52" rx="26" fill="#fff" stroke="#49785d" stroke-width="1.5"
-            filter="url(#ishadow-sm)"/>
-      <!-- icon: people -->
-      <circle cx="22" cy="22" r="8" fill="none" stroke="#49785d" stroke-width="1.8"/>
-      <path d="M8,44 Q8,34 22,34 Q36,34 36,44" fill="none" stroke="#49785d" stroke-width="1.8"
-            stroke-linecap="round"/>
-      <text x="48" y="33" font-family="'Segoe UI',Arial,sans-serif" font-size="12"
-            fill="#1a2e24" font-weight="700">มรดก &amp; ทรัสต์</text>
-      <text x="48" y="49" font-family="'Segoe UI',Arial,sans-serif" font-size="10"
-            fill="#6fa085">Estate &amp; Trust</text>
+    <!-- ── WHY DH SECTION ── -->
+    <rect x="0" y="310" width="1000" height="1" fill="#49785d" opacity=".2"/>
+    <text x="500" y="340" font-size="18" font-weight="700" fill="#1c3326" text-anchor="middle">ทำไมต้องเลือก De Hygienique?</text>
+    <rect x="424" y="348" width="152" height="2" rx="1" fill="url(#i-gold)"/>
+
+    <!-- 4 advantage cards (horizontal) -->
+    <!-- Card A: Dry Tech -->
+    <g transform="translate(26, 364)">
+      <rect width="218" height="128" rx="12" fill="#fff" stroke="#d1ddd7" stroke-width="1"
+            filter="url(#i-sm-shadow)"/>
+      <rect x="0" y="0" width="218" height="4" rx="2" fill="url(#i-gold)" opacity=".75"/>
+      <!-- Icon: no-drop (dry) -->
+      <path d="M44,36 Q52,22 52,30 A8,8 0 0,1 36,30 Q36,22 44,36 Z"
+            fill="none" stroke="#49785d" stroke-width="2"/>
+      <line x1="36" y1="52" x2="52" y2="36" stroke="#e9a841" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="44" cy="44" r="14" fill="none" stroke="#49785d" stroke-width="1.5"/>
+      <text x="76" y="34" font-size="14" fill="#1c3326" font-weight="700">ระบบแห้ง 100%</text>
+      <text x="76" y="52" font-size="11" fill="#6b7280" letter-spacing=".3">ไม่ต้องรอผ้าแห้ง</text>
+      <text x="76" y="68" font-size="11" fill="#6b7280" letter-spacing=".3">ใช้งานได้ทันที</text>
+      <rect x="20" y="88" width="178" height="28" rx="8" fill="#edf4f0"/>
+      <text x="109" y="107" font-size="11" fill="#49785d" text-anchor="middle" font-weight="600">Dry Sanitizing Technology</text>
     </g>
 
-    <g transform="translate(526, 488)">
-      <rect width="170" height="52" rx="26" fill="#fff" stroke="#49785d" stroke-width="1.5"
-            filter="url(#ishadow-sm)"/>
-      <!-- icon: global / earth circle -->
-      <circle cx="28" cy="28" r="12" fill="none" stroke="#49785d" stroke-width="1.8"/>
-      <ellipse cx="28" cy="28" rx="5" ry="12" fill="none" stroke="#49785d" stroke-width="1"/>
-      <line x1="16" y1="28" x2="40" y2="28" stroke="#49785d" stroke-width="1"/>
-      <text x="50" y="33" font-family="'Segoe UI',Arial,sans-serif" font-size="12"
-            fill="#1a2e24" font-weight="700">ลงทุนต่างประเทศ</text>
-      <text x="50" y="49" font-family="'Segoe UI',Arial,sans-serif" font-size="10"
-            fill="#6fa085">Global Investment</text>
+    <!-- Card B: No Chemical -->
+    <g transform="translate(262, 364)">
+      <rect width="218" height="128" rx="12" fill="#fff" stroke="#d1ddd7" stroke-width="1"
+            filter="url(#i-sm-shadow)"/>
+      <rect x="0" y="0" width="218" height="4" rx="2" fill="url(#i-gold)" opacity=".75"/>
+      <!-- Icon: leaf -->
+      <path d="M44,50 Q30,34 40,20 Q56,10 60,30 Q64,46 44,50 Z"
+            fill="none" stroke="#49785d" stroke-width="2"/>
+      <path d="M44,50 Q34,40 40,20" fill="none" stroke="#49785d" stroke-width="1" opacity=".5"/>
+      <line x1="44" y1="50" x2="44" y2="62" stroke="#49785d" stroke-width="1.5" stroke-linecap="round"/>
+      <text x="76" y="34" font-size="14" fill="#1c3326" font-weight="700">ไม่มีสารเคมีตกค้าง</text>
+      <text x="76" y="52" font-size="11" fill="#6b7280" letter-spacing=".3">ปลอดภัยต่อเด็กและ</text>
+      <text x="76" y="68" font-size="11" fill="#6b7280" letter-spacing=".3">ผู้แพ้สารเคมี</text>
+      <rect x="20" y="88" width="178" height="28" rx="8" fill="#edf4f0"/>
+      <text x="109" y="107" font-size="11" fill="#49785d" text-anchor="middle" font-weight="600">Zero Chemical Residue</text>
     </g>
 
-    <!-- Footer bar -->
-    <rect x="0" y="604" width="900" height="36" fill="#1a2e24"/>
-    <rect x="0" y="604" width="900" height="2" fill="url(#igold)" opacity=".7"/>
-    <text x="450" y="628" font-family="'Segoe UI',Arial,sans-serif" font-size="9"
-          fill="#6fa085" text-anchor="middle" letter-spacing="5">
-      DH THAILAND · dh-thailand.com · @dhthailand · ลงทุนมีความเสี่ยง โปรดศึกษาข้อมูลก่อนตัดสินใจ
+    <!-- Card C: Germany Tech -->
+    <g transform="translate(498, 364)">
+      <rect width="218" height="128" rx="12" fill="#fff" stroke="#d1ddd7" stroke-width="1"
+            filter="url(#i-sm-shadow)"/>
+      <rect x="0" y="0" width="218" height="4" rx="2" fill="url(#i-gold)" opacity=".75"/>
+      <!-- Icon: gear / cog -->
+      <circle cx="44" cy="40" r="14" fill="none" stroke="#49785d" stroke-width="2"/>
+      <circle cx="44" cy="40" r="6" fill="#49785d" opacity=".4"/>
+      <rect x="41" y="22" width="6" height="8" rx="3" fill="#49785d"/>
+      <rect x="41" y="50" width="6" height="8" rx="3" fill="#49785d"/>
+      <rect x="22" y="37" width="8" height="6" rx="3" fill="#49785d"/>
+      <rect x="58" y="37" width="8" height="6" rx="3" fill="#49785d"/>
+      <!-- Gold star on gear -->
+      <polygon points="44,36 45.5,40 50,40 46.5,42.5 47.8,47 44,44.5 40.2,47 41.5,42.5 38,40 42.5,40"
+               fill="#e9a841" opacity=".8"/>
+      <text x="76" y="34" font-size="14" fill="#1c3326" font-weight="700">เทคโนโลยีจากเยอรมนี</text>
+      <text x="76" y="52" font-size="11" fill="#6b7280" letter-spacing=".3">Potema® — ผู้นำระดับโลก</text>
+      <text x="76" y="68" font-size="11" fill="#6b7280" letter-spacing=".3">ผ่านมาตรฐาน ECARF</text>
+      <rect x="20" y="88" width="178" height="28" rx="8" fill="#edf4f0"/>
+      <text x="109" y="107" font-size="11" fill="#49785d" text-anchor="middle" font-weight="600">Potema® Germany Technology</text>
+    </g>
+
+    <!-- Card D: Corporate -->
+    <g transform="translate(734, 364)">
+      <rect width="240" height="128" rx="12" fill="#fff" stroke="#d1ddd7" stroke-width="1"
+            filter="url(#i-sm-shadow)"/>
+      <rect x="0" y="0" width="240" height="4" rx="2" fill="url(#i-gold)" opacity=".75"/>
+      <!-- Icon: building + house -->
+      <rect x="30" y="28" width="14" height="32" rx="2" fill="#49785d" opacity=".6"/>
+      <rect x="48" y="20" width="18" height="40" rx="2" fill="#49785d" opacity=".8"/>
+      <rect x="30" y="20" width="14" height="6" rx="1" fill="#e9a841" opacity=".7"/>
+      <!-- small house -->
+      <polygon points="20,62 28,48 36,62" fill="#49785d" opacity=".5"/>
+      <rect x="22" y="62" width="12" height="10" rx="1" fill="#49785d" opacity=".5"/>
+      <rect x="28" y="64" width="4" height="8" rx="1" fill="#e9a841" opacity=".5"/>
+      <text x="80" y="34" font-size="14" fill="#1c3326" font-weight="700">ทั้งบ้านและองค์กร</text>
+      <text x="80" y="52" font-size="11" fill="#6b7280" letter-spacing=".3">โรงแรม · ออฟฟิศ · โรงภาพยนตร์</text>
+      <text x="80" y="68" font-size="11" fill="#6b7280" letter-spacing=".3">หอพัก · ร้านอาหาร · เครื่องบิน</text>
+      <rect x="20" y="88" width="200" height="28" rx="8" fill="#edf4f0"/>
+      <text x="120" y="107" font-size="11" fill="#49785d" text-anchor="middle" font-weight="600">Residential &amp; Corporate</text>
+    </g>
+
+    <!-- ── BOTTOM SERVICE TAGS ── -->
+    <rect x="0" y="520" width="1000" height="1" fill="#49785d" opacity=".15"/>
+
+    <!-- Service tag pills row -->
+    <g transform="translate(26, 536)">
+      <rect width="130" height="40" rx="20" fill="#49785d"/>
+      <text x="65" y="15" font-size="10" fill="#fff" text-anchor="middle">🛏 ที่นอน</text>
+      <text x="65" y="29" font-size="9"  fill="#a8c4b4" text-anchor="middle" letter-spacing="1">MATTRESS</text>
+    </g>
+    <g transform="translate(172, 536)">
+      <rect width="130" height="40" rx="20" fill="#49785d"/>
+      <text x="65" y="15" font-size="10" fill="#fff" text-anchor="middle">🛋 โซฟา</text>
+      <text x="65" y="29" font-size="9"  fill="#a8c4b4" text-anchor="middle" letter-spacing="1">SOFA</text>
+    </g>
+    <g transform="translate(318, 536)">
+      <rect width="130" height="40" rx="20" fill="#49785d"/>
+      <text x="65" y="15" font-size="10" fill="#fff" text-anchor="middle">🎭 พรม</text>
+      <text x="65" y="29" font-size="9"  fill="#a8c4b4" text-anchor="middle" letter-spacing="1">CARPET</text>
+    </g>
+    <g transform="translate(464, 536)">
+      <rect width="130" height="40" rx="20" fill="#49785d"/>
+      <text x="65" y="15" font-size="10" fill="#fff" text-anchor="middle">🪟 ผ้าม่าน</text>
+      <text x="65" y="29" font-size="9"  fill="#a8c4b4" text-anchor="middle" letter-spacing="1">CURTAIN</text>
+    </g>
+    <g transform="translate(610, 536)">
+      <rect width="130" height="40" rx="20" fill="#2d5042"/>
+      <text x="65" y="15" font-size="10" fill="#fff" text-anchor="middle">🚗 รถยนต์</text>
+      <text x="65" y="29" font-size="9"  fill="#a8c4b4" text-anchor="middle" letter-spacing="1">CAR CARE</text>
+    </g>
+    <g transform="translate(756, 536)">
+      <rect width="130" height="40" rx="20" fill="#2d5042"/>
+      <text x="65" y="15" font-size="10" fill="#fff" text-anchor="middle">🚁 โดรนอาคาร</text>
+      <text x="65" y="29" font-size="9"  fill="#a8c4b4" text-anchor="middle" letter-spacing="1">DRONE GLASS</text>
+    </g>
+
+    <!-- More services row -->
+    <g transform="translate(99, 592)">
+      <rect width="150" height="36" rx="18" fill="#fff" stroke="#49785d" stroke-width="1.2"
+            filter="url(#i-sm-shadow)"/>
+      <text x="75" y="13" font-size="10" fill="#49785d" text-anchor="middle">ฆ่าเชื้อโรค</text>
+      <text x="75" y="28" font-size="9"  fill="#6b7280" text-anchor="middle" letter-spacing="1">DISINFECTION</text>
+    </g>
+    <g transform="translate(265, 592)">
+      <rect width="150" height="36" rx="18" fill="#fff" stroke="#49785d" stroke-width="1.2"
+            filter="url(#i-sm-shadow)"/>
+      <text x="75" y="13" font-size="10" fill="#49785d" text-anchor="middle">กำจัดปลวก</text>
+      <text x="75" y="28" font-size="9"  fill="#6b7280" text-anchor="middle" letter-spacing="1">PEST CONTROL</text>
+    </g>
+    <g transform="translate(431, 592)">
+      <rect width="150" height="36" rx="18" fill="#fff" stroke="#49785d" stroke-width="1.2"
+            filter="url(#i-sm-shadow)"/>
+      <text x="75" y="13" font-size="10" fill="#49785d" text-anchor="middle">ฆ่าเชื้อทางอากาศ</text>
+      <text x="75" y="28" font-size="9"  fill="#6b7280" text-anchor="middle" letter-spacing="1">AIR DISINFECTION</text>
+    </g>
+    <g transform="translate(597, 592)">
+      <rect width="150" height="36" rx="18" fill="#fff" stroke="#49785d" stroke-width="1.2"
+            filter="url(#i-sm-shadow)"/>
+      <text x="75" y="13" font-size="10" fill="#49785d" text-anchor="middle">ฟิล์มกระจก</text>
+      <text x="75" y="28" font-size="9"  fill="#6b7280" text-anchor="middle" letter-spacing="1">WINDOW FILM</text>
+    </g>
+    <g transform="translate(763, 592)">
+      <rect width="150" height="36" rx="18" fill="#fff" stroke="#49785d" stroke-width="1.2"
+            filter="url(#i-sm-shadow)"/>
+      <text x="75" y="13" font-size="10" fill="#49785d" text-anchor="middle">ฟิล์มเฟอร์นิเจอร์</text>
+      <text x="75" y="28" font-size="9"  fill="#6b7280" text-anchor="middle" letter-spacing="1">FURNITURE FILM</text>
+    </g>
+
+    <!-- FOOTER -->
+    <rect x="0" y="646" width="1000" height="34" fill="#1c3326"/>
+    <rect x="0" y="646" width="1000" height="2" fill="url(#i-gold)" opacity=".75"/>
+    <text x="500" y="669" font-size="9" fill="#6fa085" text-anchor="middle" letter-spacing="4">
+      DE HYGIENIQUE (THAILAND) · dh-thailand.com · @dhthailand · TOTAL INDOOR HYGIENE SOLUTION SINCE 2009
     </text>
   </g>
 </svg>
-    </div>
   </div>
+</div>
 
-  <!-- ═══════════════════════════════════════════════
-       COMMENT SECTION
-  ════════════════════════════════════════════════ -->
-  <div class="divider"></div>
+<!-- ══════════════════════════════════════════════
+     COMMENT SECTION
+════════════════════════════════════════════════ -->
+<div class="divider"></div>
+<div class="comment-section">
+  <h2>Review &amp; Comment</h2>
+  <p class="subtitle">กรุณาส่งคอมเม้นกลับมาเพื่อแก้ไข — ระบุ Asset, ประเภทการแก้ไข และรายละเอียด</p>
 
-  <div class="comment-section">
-    <h2>📝 Review &amp; Comment</h2>
-    <p class="subtitle">กรุณาส่งคอมเม้นกลับมาเพื่อทำการแก้ไข — ระบุ Design Asset, ประเภทการแก้ไข และรายละเอียด</p>
-
-    <form class="comment-form" onsubmit="submitComment(event)">
-
-      <div class="form-row">
-        <div class="form-group">
-          <label>ชื่อผู้ Review</label>
-          <input type="text" id="reviewer-name" placeholder="เช่น Khun Napat, Marketing Team" />
-        </div>
-        <div class="form-group">
-          <label>Design Asset ที่ต้องการแก้ไข</label>
-          <select id="asset-select">
-            <option value="">— เลือก Asset —</option>
-            <option value="01">Design 01 — Web Banner (Hero)</option>
-            <option value="02">Design 02 — Promotional Poster</option>
-            <option value="03">Design 03 — Infographic Services</option>
-            <option value="all">ทั้งหมด (All Assets)</option>
-          </select>
-        </div>
-      </div>
-
+  <form class="comment-form" onsubmit="submitComment(event)">
+    <div class="form-row">
       <div class="form-group">
-        <label>ประเภทการแก้ไข</label>
-        <div class="tag-group" id="tag-group">
-          <span class="tag" onclick="toggleTag(this)">🎨 สี / Color</span>
-          <span class="tag" onclick="toggleTag(this)">🔤 ข้อความ / Text</span>
-          <span class="tag" onclick="toggleTag(this)">📐 Layout / Structure</span>
-          <span class="tag" onclick="toggleTag(this)">🖼️ Graphic / Icon</span>
-          <span class="tag" onclick="toggleTag(this)">✨ Visual Effect</span>
-          <span class="tag" onclick="toggleTag(this)">📏 ขนาด / Size</span>
-          <span class="tag" onclick="toggleTag(this)">🔄 เนื้อหา / Content</span>
-          <span class="tag" onclick="toggleTag(this)">✅ Approve ไม่ต้องแก้</span>
-        </div>
+        <label>ชื่อผู้ Review</label>
+        <input type="text" id="reviewer-name" placeholder="เช่น Marketing Team"/>
       </div>
-
       <div class="form-group">
-        <label>รายละเอียดการแก้ไข</label>
-        <textarea id="comment-text"
-          placeholder="เช่น: ใน Design 02 อยากให้เปลี่ยน headline เป็น... / ปรับสีพื้นหลังของ card ให้อ่อนลง / เพิ่ม CTA button ด้านล่าง..."></textarea>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label>ความเร่งด่วน (Priority)</label>
-          <select id="priority-select">
-            <option value="normal">🟡 Normal</option>
-            <option value="high">🔴 High — ต้องแก้ก่อน</option>
-            <option value="low">🟢 Low — แก้ได้ทีหลัง</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>สถานะ Design นี้</label>
-          <select id="status-select">
-            <option value="revision">🔄 ต้องการแก้ไข</option>
-            <option value="approved">✅ Approved</option>
-            <option value="discuss">💬 ขอหารือเพิ่มเติม</option>
-          </select>
-        </div>
-      </div>
-
-      <button type="submit" class="btn-submit">ส่ง Comment →</button>
-    </form>
-
-    <!-- Comments list -->
-    <div class="comments-list" id="comments-list">
-      <!-- Placeholder / example comment -->
-      <div class="comment-item">
-        <div class="comment-meta">
-          <div class="comment-avatar">DH</div>
-          <span class="comment-author">DH Design Team</span>
-          <span class="comment-time">Template Note</span>
-        </div>
-        <div class="comment-text">
-          Board นี้พร้อมรับ Feedback แล้ว — กรุณากรอกฟอร์มด้านบนและกด "ส่ง Comment"
-          คอมเม้นของคุณจะปรากฏที่นี่เพื่อใช้อ้างอิงในการแก้ไขงาน
-        </div>
-        <span class="comment-tag">SYSTEM NOTE</span>
+        <label>Design Asset</label>
+        <select id="asset-select">
+          <option value="">— เลือก Asset —</option>
+          <option>Design 01 — Web Banner Hero</option>
+          <option>Design 02 — Promotional Poster</option>
+          <option>Design 03 — Infographic Process</option>
+          <option>ทั้งหมด (All Assets)</option>
+        </select>
       </div>
     </div>
+
+    <div class="form-group">
+      <label>ประเภทการแก้ไข</label>
+      <div class="tag-group" id="tag-group">
+        <span class="tag" onclick="toggleTag(this)">🎨 สี / Color</span>
+        <span class="tag" onclick="toggleTag(this)">🔤 ข้อความ / Copy</span>
+        <span class="tag" onclick="toggleTag(this)">📐 Layout</span>
+        <span class="tag" onclick="toggleTag(this)">🖼 Graphic / Icon</span>
+        <span class="tag" onclick="toggleTag(this)">✨ Visual Effect</span>
+        <span class="tag" onclick="toggleTag(this)">📏 ขนาด / Size</span>
+        <span class="tag" onclick="toggleTag(this)">🔄 เนื้อหา / Content</span>
+        <span class="tag" onclick="toggleTag(this)">✅ Approve</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>รายละเอียดการแก้ไข</label>
+      <textarea id="comment-text" placeholder="อธิบายสิ่งที่ต้องการแก้ไข..."></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Priority</label>
+        <select id="priority-select">
+          <option value="normal">🟡 Normal</option>
+          <option value="high">🔴 High — แก้ก่อนเลย</option>
+          <option value="low">🟢 Low — แก้ทีหลังได้</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select id="status-select">
+          <option value="revision">🔄 ต้องการแก้ไข</option>
+          <option value="approved">✅ Approved</option>
+          <option value="discuss">💬 หารือเพิ่มเติม</option>
+        </select>
+      </div>
+    </div>
+
+    <button type="submit" class="btn-submit">ส่ง Comment →</button>
+  </form>
+
+  <div class="comments-list" id="comments-list">
+    <div class="comment-item">
+      <div class="comment-meta">
+        <div class="comment-avatar">DH</div>
+        <span class="comment-author">De Hygienique Design Team</span>
+        <span class="comment-time">v2.0 — ปรับใหม่ตามธุรกิจจริง</span>
+      </div>
+      <div class="comment-text">Board v2.0 — ออกแบบใหม่ทั้งหมดให้สอดคล้องกับธุรกิจบริการทำความสะอาดและสุขอนามัยครบวงจรของ De Hygienique Thailand อย่างถูกต้อง ใช้ Font DB Airy, Brand Colors #49785d + #e9a841</div>
+      <span class="comment-tag">SYSTEM NOTE · V2.0</span>
+    </div>
   </div>
+</div>
 
 </div><!-- /board -->
 
 <script>
-  function toggleTag(el) {
-    el.classList.toggle('active');
-  }
-
-  function submitComment(e) {
+  function toggleTag(el){ el.classList.toggle('active'); }
+  function submitComment(e){
     e.preventDefault();
-    const name   = document.getElementById('reviewer-name').value.trim() || 'Anonymous';
-    const asset  = document.getElementById('asset-select');
-    const assetLabel = asset.options[asset.selectedIndex].text || 'ไม่ระบุ';
-    const comment  = document.getElementById('comment-text').value.trim();
+    const name = document.getElementById('reviewer-name').value.trim() || 'Anonymous';
+    const asset = document.getElementById('asset-select');
+    const assetLabel = asset.options[asset.selectedIndex].text;
+    const comment = document.getElementById('comment-text').value.trim();
     const priority = document.getElementById('priority-select').value;
-    const status   = document.getElementById('status-select').value;
-
-    const activeTags = [...document.querySelectorAll('.tag.active')].map(t => t.textContent);
-    const tagsStr  = activeTags.length ? activeTags.join(' · ') : 'ไม่ระบุประเภท';
-
-    if (!comment) { alert('กรุณาระบุรายละเอียดการแก้ไข'); return; }
-
-    const now  = new Date();
-    const timeStr = now.toLocaleDateString('th-TH', { year:'numeric', month:'short', day:'numeric' })
-                  + ' ' + now.toLocaleTimeString('th-TH', { hour:'2-digit', minute:'2-digit' });
-
-    const priorityMap = { normal:'🟡 Normal', high:'🔴 High', low:'🟢 Low' };
-    const statusMap   = { revision:'🔄 ต้องการแก้ไข', approved:'✅ Approved', discuss:'💬 หารือเพิ่มเติม' };
-
-    const initials = name.split(' ').map(w=>w[0]||'').join('').substring(0,2).toUpperCase() || 'AN';
-
+    const status = document.getElementById('status-select').value;
+    const tags = [...document.querySelectorAll('.tag.active')].map(t=>t.textContent).join(' · ') || 'ไม่ระบุ';
+    if(!comment){ alert('กรุณาระบุรายละเอียด'); return; }
+    const now = new Date();
+    const time = now.toLocaleDateString('th-TH',{year:'numeric',month:'short',day:'numeric'})
+                +' '+now.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});
+    const initials = name.split(' ').map(w=>w[0]||'').join('').substring(0,2).toUpperCase()||'AN';
+    const pm = {normal:'🟡 Normal',high:'🔴 High',low:'🟢 Low'};
+    const sm = {revision:'🔄 ต้องการแก้ไข',approved:'✅ Approved',discuss:'💬 หารือ'};
     const item = document.createElement('div');
     item.className = 'comment-item';
     item.innerHTML = `
       <div class="comment-meta">
         <div class="comment-avatar">${initials}</div>
         <span class="comment-author">${name}</span>
-        <span class="comment-time">${timeStr}</span>
+        <span class="comment-time">${time}</span>
       </div>
       <div class="comment-text">
         <strong>Asset:</strong> ${assetLabel}<br>
-        <strong>ประเภท:</strong> ${tagsStr}<br>
-        <strong>Priority:</strong> ${priorityMap[priority]} &nbsp;|&nbsp; <strong>Status:</strong> ${statusMap[status]}<br><br>
+        <strong>ประเภท:</strong> ${tags}<br>
+        <strong>Priority:</strong> ${pm[priority]} &nbsp;|&nbsp; <strong>Status:</strong> ${sm[status]}<br><br>
         ${comment.replace(/\n/g,'<br>')}
       </div>
-      <span class="comment-tag">${statusMap[status]}</span>
-    `;
-
-    const list = document.getElementById('comments-list');
-    list.insertBefore(item, list.firstChild);
-
-    // Reset form
-    document.getElementById('reviewer-name').value = '';
-    document.getElementById('comment-text').value = '';
-    document.getElementById('asset-select').selectedIndex = 0;
-    document.getElementById('priority-select').selectedIndex = 0;
-    document.getElementById('status-select').selectedIndex = 0;
-    document.querySelectorAll('.tag.active').forEach(t => t.classList.remove('active'));
+      <span class="comment-tag">${sm[status]}</span>`;
+    document.getElementById('comments-list').insertBefore(item, document.getElementById('comments-list').firstChild);
+    document.getElementById('reviewer-name').value='';
+    document.getElementById('comment-text').value='';
+    document.getElementById('asset-select').selectedIndex=0;
+    document.getElementById('priority-select').selectedIndex=0;
+    document.getElementById('status-select').selectedIndex=0;
+    document.querySelectorAll('.tag.active').forEach(t=>t.classList.remove('active'));
   }
 </script>
 </body>
